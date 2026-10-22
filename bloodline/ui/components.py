@@ -56,11 +56,30 @@ def hint_text(t: T, person: Person, config: GameConfig, lang: str) -> str:
     if h.kind == "parent_affected":
         return t(f"hint.parent_affected.{p['relative']}", disease=disease_name(config, p["gene"], lang))
     if h.kind == "sibling_affected":
-        key = "hint.sibling_affected.one" if p["n"] == 1 else "hint.sibling_affected.many"
-        return t(key, n=p["n"], total=p["total"], disease=disease_name(config, p["gene"], lang))
+        n, total = p["n"], p["total"]
+        if total == 1:
+            key = "hint.sibling_affected.only"
+        elif n == total:
+            key = "hint.sibling_affected.both" if total == 2 else "hint.sibling_affected.all"
+        else:
+            key = "hint.sibling_affected.one" if n == 1 else "hint.sibling_affected.many"
+        n_word = number_word(t, n)
+        return t(
+            key,
+            n=n_word[:1].upper() + n_word[1:],
+            total=number_word(t, total),
+            disease=disease_name(config, p["gene"], lang),
+        )
     if h.kind == "healthy_family":
-        return t("hint.healthy_family", total=p["total"])
+        key = "hint.healthy_family.only" if p["total"] == 1 else "hint.healthy_family"
+        return t(key, total=number_word(t, p["total"]))
     return ""
+
+
+def number_word(t: T, n: int) -> str:
+    """'dos' instead of '2' for small numbers (falls back to digits)."""
+    word = t(f"num.{n}")
+    return str(n) if word == f"num.{n}" else word
 
 
 def test_label(t: T, result: str, sex: str) -> str:

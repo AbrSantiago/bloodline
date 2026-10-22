@@ -14,7 +14,7 @@ Que vos, el bisnieto o la bisnieta, nazcas sin enfermedades hereditarias.
 
 ## Cómo se juega
 
-1. Mirá a los 20 candidatos: ves si están enfermos y una pista sobre su familia. **No ves quién es portador.**
+1. Mirá a los 20 candidatos y la pista sobre su familia. **No sabés quién es portador ni quién está enfermo.**
 2. Tenés **4 tests genéticos gratis**. Cada test revela si un candidato está sin copias, es portador o está enfermo de **una** enfermedad.
 3. Tocá cada cuadro del árbol para elegir quién va ahí. Cada pareja es un hombre y una mujer.
 4. Tocá **¡Nacer!** y mirá quién sos.

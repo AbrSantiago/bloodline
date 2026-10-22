@@ -5,7 +5,10 @@
     "candidates_per_sex": 10,
     "tests_per_game": 4,
     "test_scope": "single_disease",
-    "siblings_range": [2, 5],
+    "siblings_range": [
+      2,
+      5
+    ],
     "fun_fact_probability": 0.35,
     "ranking_min_games": 3
   },
@@ -13,20 +16,29 @@
     {
       "id": "d1",
       "kind": "disease",
-      "recessive_freq": 0.3,
-      "name": {"es": "Enfermedad 1", "en": "Disease 1"}
+      "recessive_freq": 0.45,
+      "name": {
+        "es": "Enfermedad 1",
+        "en": "Disease 1"
+      }
     },
     {
       "id": "d2",
       "kind": "disease",
-      "recessive_freq": 0.25,
-      "name": {"es": "Enfermedad 2", "en": "Disease 2"}
+      "recessive_freq": 0.4,
+      "name": {
+        "es": "Enfermedad 2",
+        "en": "Disease 2"
+      }
     },
     {
       "id": "d3",
       "kind": "disease",
-      "recessive_freq": 0.35,
-      "name": {"es": "Enfermedad 3", "en": "Disease 3"}
+      "recessive_freq": 0.5,
+      "name": {
+        "es": "Enfermedad 3",
+        "en": "Disease 3"
+      }
     },
     {
       "id": "eyes",
@@ -35,7 +47,10 @@
       "recessive_freq": 0.45,
       "dominant": "brown",
       "recessive": "blue",
-      "name": {"es": "Color de ojos", "en": "Eye colour"}
+      "name": {
+        "es": "Color de ojos",
+        "en": "Eye colour"
+      }
     },
     {
       "id": "hair",
@@ -44,7 +59,10 @@
       "recessive_freq": 0.35,
       "dominant": "brown",
       "recessive": "red",
-      "name": {"es": "Color de pelo", "en": "Hair colour"}
+      "name": {
+        "es": "Color de pelo",
+        "en": "Hair colour"
+      }
     },
     {
       "id": "freckles",
@@ -53,37 +71,162 @@
       "recessive_freq": 0.75,
       "dominant": true,
       "recessive": false,
-      "name": {"es": "Pecas", "en": "Freckles"}
+      "name": {
+        "es": "Pecas",
+        "en": "Freckles"
+      }
     }
   ],
-  "skin_tones": {"light": 0.35, "medium": 0.3, "tan": 0.22, "dark": 0.13},
+  "skin_tones": {
+    "light": 0.35,
+    "medium": 0.3,
+    "tan": 0.22,
+    "dark": 0.13
+  },
   "names": {
-    "F": ["Dorotea", "Remedios", "Herminia", "Clotilde", "Eulalia", "Ramona", "Asunción", "Filomena",
-          "Rosario", "Leonor", "Petrona", "Josefa", "Amparo", "Consuelo", "Genoveva", "Brígida",
-          "Casilda", "Delfina", "Esperanza", "Matilde", "Natividad", "Pilar", "Celestina", "Otilia"],
-    "M": ["Eusebio", "Anselmo", "Leopoldo", "Bautista", "Ramiro", "Cipriano", "Evaristo", "Florencio",
-          "Gumersindo", "Hipólito", "Isidoro", "Jacinto", "Lisandro", "Melquíades", "Nicanor", "Ovidio",
-          "Pascual", "Remigio", "Saturnino", "Teodoro", "Venancio", "Wenceslao", "Zacarías", "Abelardo"],
-    "surnames": ["Gómez", "Ferreyra", "Sosa", "Acosta", "Benítez", "Medina", "Herrera", "Aguirre",
-                 "Pereyra", "Ledesma", "Quiroga", "Villalba", "Godoy", "Ojeda", "Luna", "Ríos",
-                 "Cabrera", "Paz", "Correa", "Vera", "Molina", "Toledo", "Arce", "Funes"]
+    "F": [
+      "Dorotea",
+      "Remedios",
+      "Herminia",
+      "Clotilde",
+      "Eulalia",
+      "Ramona",
+      "Asunción",
+      "Filomena",
+      "Rosario",
+      "Leonor",
+      "Petrona",
+      "Josefa",
+      "Amparo",
+      "Consuelo",
+      "Genoveva",
+      "Brígida",
+      "Casilda",
+      "Delfina",
+      "Esperanza",
+      "Matilde",
+      "Natividad",
+      "Pilar",
+      "Celestina",
+      "Otilia"
+    ],
+    "M": [
+      "Eusebio",
+      "Anselmo",
+      "Leopoldo",
+      "Bautista",
+      "Ramiro",
+      "Cipriano",
+      "Evaristo",
+      "Florencio",
+      "Gumersindo",
+      "Hipólito",
+      "Isidoro",
+      "Jacinto",
+      "Lisandro",
+      "Melquíades",
+      "Nicanor",
+      "Ovidio",
+      "Pascual",
+      "Remigio",
+      "Saturnino",
+      "Teodoro",
+      "Venancio",
+      "Wenceslao",
+      "Zacarías",
+      "Abelardo"
+    ],
+    "surnames": [
+      "Gómez",
+      "Ferreyra",
+      "Sosa",
+      "Acosta",
+      "Benítez",
+      "Medina",
+      "Herrera",
+      "Aguirre",
+      "Pereyra",
+      "Ledesma",
+      "Quiroga",
+      "Villalba",
+      "Godoy",
+      "Ojeda",
+      "Luna",
+      "Ríos",
+      "Cabrera",
+      "Paz",
+      "Correa",
+      "Vera",
+      "Molina",
+      "Toledo",
+      "Arce",
+      "Funes"
+    ]
   },
   "fun_facts": [
-    {"es": "Hacía los mejores ñoquis del barrio.", "en": "Made the best gnocchi in the neighbourhood."},
-    {"es": "Ganó un concurso de tango en 1923.", "en": "Won a tango contest in 1923."},
-    {"es": "Nunca perdió un truco en su vida.", "en": "Never lost a game of truco in their life."},
-    {"es": "Cruzó el Atlántico en barco con una valija y un salame.", "en": "Crossed the Atlantic with one suitcase and a salami."},
-    {"es": "Tenía un loro que sabía el himno.", "en": "Had a parrot that knew the national anthem."},
-    {"es": "Atendía el almacén y fiaba a medio pueblo.", "en": "Ran the grocery store and gave credit to half the town."},
-    {"es": "Tocaba el bandoneón en todos los casamientos.", "en": "Played the bandoneon at every wedding."},
-    {"es": "Escribía cartas de amor por encargo.", "en": "Wrote love letters for hire."},
-    {"es": "Domaba caballos los domingos.", "en": "Tamed horses on Sundays."},
-    {"es": "Fue la primera persona del pueblo en tener radio.", "en": "First person in town to own a radio."},
-    {"es": "Juraba haber visto un plato volador en 1911.", "en": "Swore they saw a flying saucer in 1911."},
-    {"es": "Cocinaba un locro que se olía desde la estación.", "en": "Cooked a stew you could smell from the train station."},
-    {"es": "Coleccionaba botones de uniformes.", "en": "Collected uniform buttons."},
-    {"es": "Le ganó una pulseada al comisario.", "en": "Beat the police chief at arm wrestling."},
-    {"es": "Plantó el ombú que todavía está en la plaza.", "en": "Planted the ombú tree still standing in the square."},
-    {"es": "Sabía leer las nubes y nunca le erró al pronóstico.", "en": "Could read the clouds and never got the weather wrong."}
+    {
+      "es": "Hacía los mejores ñoquis del barrio.",
+      "en": "Made the best gnocchi in the neighbourhood."
+    },
+    {
+      "es": "Ganó un concurso de tango en 1923.",
+      "en": "Won a tango contest in 1923."
+    },
+    {
+      "es": "Nunca perdió un truco en su vida.",
+      "en": "Never lost a game of truco in their life."
+    },
+    {
+      "es": "Cruzó el Atlántico en barco con una valija y un salame.",
+      "en": "Crossed the Atlantic with one suitcase and a salami."
+    },
+    {
+      "es": "Tenía un loro que sabía el himno.",
+      "en": "Had a parrot that knew the national anthem."
+    },
+    {
+      "es": "Atendía el almacén y fiaba a medio pueblo.",
+      "en": "Ran the grocery store and gave credit to half the town."
+    },
+    {
+      "es": "Tocaba el bandoneón en todos los casamientos.",
+      "en": "Played the bandoneon at every wedding."
+    },
+    {
+      "es": "Escribía cartas de amor por encargo.",
+      "en": "Wrote love letters for hire."
+    },
+    {
+      "es": "Domaba caballos los domingos.",
+      "en": "Tamed horses on Sundays."
+    },
+    {
+      "es": "Fue la primera persona del pueblo en tener radio.",
+      "en": "First person in town to own a radio."
+    },
+    {
+      "es": "Juraba haber visto un plato volador en 1911.",
+      "en": "Swore they saw a flying saucer in 1911."
+    },
+    {
+      "es": "Cocinaba un locro que se olía desde la estación.",
+      "en": "Cooked a stew you could smell from the train station."
+    },
+    {
+      "es": "Coleccionaba botones de uniformes.",
+      "en": "Collected uniform buttons."
+    },
+    {
+      "es": "Le ganó una pulseada al comisario.",
+      "en": "Beat the police chief at arm wrestling."
+    },
+    {
+      "es": "Plantó el ombú que todavía está en la plaza.",
+      "en": "Planted the ombú tree still standing in the square."
+    },
+    {
+      "es": "Sabía leer las nubes y nunca le erró al pronóstico.",
+      "en": "Could read the clouds and never got the weather wrong."
+    }
   ]
 }

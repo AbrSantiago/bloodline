@@ -311,7 +311,7 @@ md(r"""
 * **Penetrancia completa.** Tener aa implica enfermarse siempre. Muchas enfermedades reales tienen penetrancia incompleta.
 * **Genes independientes.** No hay ligamiento entre genes ni mutaciones nuevas.
 * **Sin endogamia.** Los 8 bisabuelos son personas distintas y no emparentadas; el cálculo exacto supone que los dos padres de cada persona son independientes.
-* **Frecuencias inventadas.** Las frecuencias alélicas se eligieron para que el juego sea desafiante (≈25% de riesgo con un árbol al azar), no para representar enfermedades reales.
+* **Frecuencias inventadas.** Las frecuencias alélicas se eligieron para que el juego sea desafiante (≈50% de riesgo con un árbol al azar y ≈40% leyendo las pistas), no para representar enfermedades reales.
 * **Potencia limitada.** Como muestra la sección 5, desviaciones chicas del modelo solo se detectan con muestras grandes.
 """)
 

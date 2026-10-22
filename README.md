@@ -10,7 +10,7 @@ Built for the *Trabajo Práctico clase 4: Funciones de distribución* (UNQ). The
 
 ## How to play
 
-1. Look at the candidates: you see whether they are sick and one clue about their family. You can't see who is a carrier.
+1. Look at the candidates and the clue about their family. You don't know who is a carrier or who is sick.
 2. Use your 4 free genetic tests: each one reveals a candidate's genotype for one disease.
 3. Tap each frame of the tree to choose who goes there (each couple is a man and a woman).
 4. Press **Be born!**
@@ -144,7 +144,7 @@ Randomness always goes through `numpy.random.default_rng`. The candidates of a g
 * One gene per trait, two alleles, complete penetrance, no linkage and no new mutations.
 * Eye and hair colour are simplified to one gene each. Skin tone is not genetic in V1: each child takes it from a random parent.
 * The 8 great-grandparents are unrelated (no inbreeding).
-* Allele frequencies are made up to keep the game challenging (≈25% risk for a random tree); they don't describe real diseases.
+* Allele frequencies are made up to keep the game challenging (≈50% risk for a random tree, ≈40% for a player who reads the clues); they don't describe real diseases.
 
 ## Roadmap (V2 ideas)
 

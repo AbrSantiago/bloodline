@@ -34,7 +34,7 @@ Valores disponibles para el dibujo:
 - `hair`: `black`, `brown`, `blond`, `red`
 - `freckles`: `TRUE` / `FALSE`
 
-**Cómo elegir q para las enfermedades.** Con frecuencia q, en la población hay p² sanos sin copias, 2pq portadores y q² enfermos (Hardy-Weinberg, p = 1 − q). Con los valores actuales (0.30, 0.25, 0.35), un árbol armado al azar tiene ≈25% de riesgo, lo que hace el juego desafiante. Si suben q, el juego se pone más difícil.
+**Cómo elegir q para las enfermedades.** Con frecuencia q, en la población hay p² sanos sin copias, 2pq portadores y q² enfermos (Hardy-Weinberg, p = 1 − q). Con los valores actuales (0.45, 0.40, 0.50), un árbol armado al azar tiene ≈50% de riesgo y uno armado leyendo las pistas, ≈40%, lo que hace el juego desafiante. Si suben q, el juego se pone más difícil.
 
 ### `game`
 

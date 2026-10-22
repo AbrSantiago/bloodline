@@ -28,12 +28,14 @@ st.set_page_config(page_title="Bloodline", page_icon=str(ASSETS / "icon.png"), l
 
 CSS = """
 <style>
-.block-container {max-width: 1120px; padding-top: 2rem;}
+.block-container {max-width: 1120px; padding-top: 3.6rem;}
 h1, h2, h3, h4 {font-family: Georgia, 'Times New Roman', serif !important;}
 .stButton button[kind="primary"] {font-weight: 700; letter-spacing: .03em;}
 .st-key-play button {min-height: 3.4rem; font-size: 1.3rem; letter-spacing: .18em;
                      box-shadow: 0 6px 0 #5e1d26, 0 10px 18px rgba(90, 30, 40, .3);}
 .st-key-play button p {font-size: 1.3rem;}
+.st-key-birth button {min-height: 3rem; letter-spacing: .12em;}
+.st-key-birth button p {font-size: 1.15rem;}
 /* menu */
 .hero {position: relative; overflow: hidden; margin-top: 12px; border-radius: 22px; padding: 26px 12px 24px; text-align: center;
        background: radial-gradient(120% 90% at 50% 0%, #7a2a36 0%, #3b1a20 60%, #24100f 100%); color: #f6e7c8;
@@ -252,10 +254,7 @@ def card_body(game: Game, cid: str) -> str:
     """Portrait, name, status chips, clue and test results of a candidate."""
     cfg, lang = game.config, st.session_state.lang
     c = game.candidate(cid)
-    chips = [
-        ui.chip(t("card.has", disease=ui.disease_name(cfg, d, lang)), STATUS_COLORS["affected"])
-        for d in sorted(game.model.phenotype(c.genome).affected)
-    ]
+    chips = []  # disease status stays hidden until a test reveals it
     slot = game.slot_of(cid)
     if slot is not None:
         chips.append(ui.chip(t("card.placed", n=slot // 2 + 1), "#8c2f39"))
@@ -368,7 +367,8 @@ def screen_build() -> None:
     st.markdown(f'<div class="tree-wrap lower">{ui.lower_tree(game, t)}</div>', unsafe_allow_html=True)
 
     ready = game.is_complete
-    st.button(t("build.birth"), type="primary", icon="👶", width="stretch", disabled=not ready, on_click=on_birth)
+    with st.container(horizontal_alignment="center"):
+        st.button(t("build.birth"), key="birth", type="primary", width=300, disabled=not ready, on_click=on_birth)
     if not ready:
         st.caption(t("build.birth_help"))
 
@@ -442,9 +442,9 @@ def screen_result() -> None:
             st.caption(
                 t("result.carriers", names=", ".join(carriers)) if carriers else t("result.no_carriers")
             )
-        if result.outcome == "loss" and risk.p_loss < 0.15:
+        if result.outcome == "loss" and risk.p_loss < 0.25:
             st.info(t("result.bad_luck"), icon="🎲")
-        elif result.outcome != "loss" and risk.p_loss > 0.3:
+        elif result.outcome != "loss" and risk.p_loss > 0.55:
             st.info(t("result.good_luck"), icon="🍀")
 
     st.toggle(t("result.show_tree"), key="show_tree")
