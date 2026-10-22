@@ -49,6 +49,15 @@ def test_assign_moves_candidate():
     assert g.slots[0] is None and g.slots[2] == cid
 
 
+def test_assign_swaps_occupied_slots():
+    g = Game(CFG, seed=7)
+    a, b = (c.id for c in g.candidates_of("M")[:2])
+    g.assign(0, a)
+    g.assign(2, b)
+    g.assign(0, b)
+    assert g.slots[0] == b and g.slots[2] == a
+
+
 def test_test_budget():
     g = Game(CFG, seed=9)
     disease = CFG.diseases[0].id

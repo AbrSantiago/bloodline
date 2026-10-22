@@ -46,6 +46,8 @@ def pedigree_svg(
     generations: int,
     spread_width: float | None = None,
     max_width: int = 820,
+    row_gap: float = ROW_GAP,
+    label_px: int = 13,
 ) -> str:
     """Draw the pedigree. ``nodes`` maps (level, index) to what to show;
     level ``generations`` holds the top row and level 0 is "me".
@@ -55,18 +57,19 @@ def pedigree_svg(
     rendered above it (the interactive founders while building)."""
     n_top = 2**generations
     couple_w = 2 * PORTRAIT_W + SPOUSE_GAP
-    row_h = PORTRAIT_H + LABEL_H + ROW_GAP
-    top_pad = 30 if spread_width else 0
+    row_h = PORTRAIT_H + LABEL_H + row_gap
+    top_pad = 24 if spread_width else 0
     if spread_width:
+        # exactly under the centre of each of the n_top equal-width boxes above
         width = spread_width
-        tops = [MARGIN + (width - 2 * MARGIN) * (i + 0.5) / n_top for i in range(n_top)]
+        tops = [width * (i + 0.5) / n_top for i in range(n_top)]
     else:
         width = 2 * MARGIN + (n_top // 2) * couple_w + (n_top // 2 - 1) * COUPLE_GAP
         tops = []
         for c in range(n_top // 2):
             x0 = MARGIN + c * (couple_w + COUPLE_GAP)
             tops += [x0 + PORTRAIT_W / 2, x0 + PORTRAIT_W + SPOUSE_GAP + PORTRAIT_W / 2]
-    height = 2 * MARGIN + top_pad + (generations + 1) * row_h - ROW_GAP
+    height = 2 * MARGIN + top_pad + (generations + 1) * row_h - row_gap
 
     # x centre of every person: top row first, then midpoints of each couple
     centers: dict[int, list[float]] = {generations: tops}
@@ -128,7 +131,7 @@ def pedigree_svg(
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width:.0f} {height:.0f}" '
         f'style="width:100%;max-width:{max_width}px;height:auto;display:block;margin:0 auto" role="img">'
-        "<style>.lbl{font:600 13px system-ui,sans-serif;fill:var(--bl-text,#2b2420)}"
+        f"<style>.lbl{{font:600 {label_px}px system-ui,sans-serif;fill:var(--bl-text,#2b2420)}}"
         ".ln path{stroke:var(--bl-line,#8a7f73);stroke-width:2.5;fill:none;stroke-linecap:round}"
         ".hl{stroke:var(--bl-accent,#8c2f39)}.ring{stroke:var(--bl-ring,#fff)}"
         ".tip rect{fill:var(--bl-surface,#fffaf0);stroke:var(--bl-gold,#b8892f)}"
@@ -142,10 +145,12 @@ def pedigree_svg(
 def _tip(tid: str, node: NodeView, cx: float, y: float, label_y: float, width: float, below: bool) -> str:
     """Small card with the status of every disease, shown on hover/tap."""
     h = TIP_PAD * 2 + TIP_LINE * (len(node.tip_lines) + 1)
-    tx = min(max(cx - TIP_W / 2, 4), width - TIP_W - 4)
+    longest = max([len(node.tip_title)] + [len(text) + 3 for _, text in node.tip_lines])
+    tip_w = max(TIP_W, int(longest * 8.4) + 2 * TIP_PAD)  # ~8.4 units per character at 15px
+    tx = min(max(cx - tip_w / 2, 4), width - tip_w - 4)
     ty = label_y + 26 if below else y - h - 8
     parts = [
-        f'<rect x="{tx:.1f}" y="{ty:.1f}" width="{TIP_W}" height="{h}" rx="10" stroke-width="2" '
+        f'<rect x="{tx:.1f}" y="{ty:.1f}" width="{tip_w}" height="{h}" rx="10" stroke-width="2" '
         'style="filter:drop-shadow(0 4px 8px rgba(0,0,0,.3))"/>',
         f'<text class="tt" x="{tx + TIP_PAD:.1f}" y="{ty + TIP_PAD + 16:.1f}">{escape(node.tip_title)}</text>',
     ]

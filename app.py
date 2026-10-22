@@ -73,6 +73,12 @@ h1, h2, h3, h4 {font-family: Georgia, 'Times New Roman', serif !important;}
 .hero {margin-bottom: 1.1rem;}
 .st-key-birth button {min-height: 3rem; letter-spacing: .12em;}
 .st-key-birth button p {font-size: 1.15rem;}
+/* menu: header on top, content centred, footer at the bottom */
+[data-testid="stMainBlockContainer"]:has(.st-key-menu-body) {min-height: 100dvh; display: flex; flex-direction: column;
+    box-sizing: border-box;}
+[data-testid="stMainBlockContainer"]:has(.st-key-menu-body) > [data-testid="stVerticalBlock"] {flex: 1 1 auto;}
+[data-testid="stLayoutWrapper"]:has(> .st-key-menu-body), .st-key-menu-body {margin-block: auto;}
+.st-key-menu-foot [data-testid="stCaptionContainer"] {text-align: center; margin: 0;}
 /* menu */
 .hero {position: relative; overflow: hidden; margin-top: 8px; border-radius: 22px; padding: 26px 12px 24px; text-align: center;
        background: radial-gradient(120% 90% at 50% 0%, #7a2a36 0%, #3b1a20 60%, #24100f 100%); color: #f6e7c8;
@@ -109,51 +115,90 @@ h1, h2, h3, h4 {font-family: Georgia, 'Times New Roman', serif !important;}
 .bl-share.done {border-color: #3f9d5a; color: #3f9d5a;}
 .qr.center {margin: 0 auto .6rem;}
 .st-key-rules-box {padding: .4rem 1rem !important;}
-/* cards */
-.portrait {max-width: 150px; margin: 0 auto;}
+/* cards (also used inside the picker dialog, which lives outside .stApp:
+   colors there inherit Streamlit's theme instead of using our variables) */
+.portrait {position: relative; max-width: 150px; margin: 0 auto;}
 .portrait-big {max-width: 230px; margin: 0 auto;}
-.card-name {text-align: center; font-weight: 700; margin: .35rem 0 .15rem; font-size: 1rem; overflow-wrap: anywhere;}
-.card-hint {font-style: italic; color: var(--bl-hint); font-size: .88rem; text-align: center; overflow-wrap: anywhere;}
+.portrait.placed svg {filter: grayscale(.85) brightness(.82);}
+.ribbon {position: absolute; left: 6%; right: 6%; bottom: 9%; padding: .12rem .2rem; border-radius: 4px;
+          background: rgba(140, 47, 57, .92); color: #fff; font-size: .7rem; font-weight: 700; text-align: center;
+          letter-spacing: .04em; text-transform: uppercase; box-shadow: 0 2px 6px rgba(0, 0, 0, .35);}
+.card-name {text-align: center; font-weight: 700; margin: .3rem 0 .1rem; font-size: .92rem; line-height: 1.2;
+             overflow-wrap: anywhere;}
+.card-hint {font-style: italic; color: inherit; opacity: .78; font-size: .8rem; line-height: 1.3; text-align: center;
+             overflow-wrap: anywhere; margin-bottom: .1rem;}
 .chip {display: inline-block; max-width: 100%; border: 1px solid; border-radius: 999px; padding: .05rem .55rem;
-       font-size: .78rem; margin: .1rem .1rem; white-space: normal; overflow-wrap: anywhere; line-height: 1.35;}
+        font-size: .78rem; margin: .1rem .1rem; white-space: normal; overflow-wrap: anywhere; line-height: 1.35;}
 .chips {text-align: center; margin: .2rem 0;}
-.tests {margin-top: .35rem;}
-[class*="st-key-card-"] {gap: .4rem; padding: .6rem .6rem .65rem !important;}
-[class*="st-key-card-"] .portrait {max-width: 132px;}
+.tests {margin-top: .25rem;}
+.test-line {font-size: .74rem; line-height: 1.3; text-align: center; overflow-wrap: anywhere;}
+.test-line .dot {margin: 0 .25rem 0 0; width: .55rem; height: .55rem;}
+[class*="st-key-card-"] {gap: .3rem; padding: .45rem .45rem .5rem !important;}
+[class*="st-key-card-"] .portrait {max-width: 104px;}
 [class*="st-key-card-"] [data-testid="stMarkdownContainer"] {margin-bottom: 0;}
-.card-hint {margin-bottom: .1rem;}
-.test-line {font-size: .8rem; line-height: 1.35; text-align: center; overflow-wrap: anywhere;}
-.test-line .dot {margin: 0 .3rem 0 0; width: .6rem; height: .6rem;}
-/* tree */
-.couple-title {font-weight: 700; text-align: center; font-size: .9rem;}
-.slot-pic {width: 80px; margin: 0 auto; transition: transform .12s ease, filter .12s ease;}
-.slot-name {font-size: .8rem; font-weight: 700; text-align: center; white-space: nowrap; overflow: hidden;
-             text-overflow: ellipsis; max-width: 88px; min-height: 1.2rem; margin-top: 2px;}
-[class*="st-key-slot-"]:not([class*="st-key-slot-btn"]) {position: relative; cursor: pointer; min-height: 126px;}
+[class*="st-key-card-"] > div:first-child {flex: 1 0 auto;}
+[class*="st-key-card-"] button {min-height: 2rem; padding: .15rem .4rem;}
+[class*="st-key-card-"] button p {font-size: .82rem;}
+.st-key-pick-grid {align-items: stretch !important; justify-content: center;}
+@media (max-width: 640px) {
+  [class*="st-key-card-d-"] {width: calc(50% - .3rem) !important;}
+  [class*="st-key-pick-grid"] [data-testid="stLayoutWrapper"]:has(> [class*="st-key-card-"]) {
+    flex: 0 0 calc(50% - .25rem) !important; width: calc(50% - .25rem) !important;}
+  .st-key-pick-grid {gap: .5rem !important;}
+  [class*="st-key-pick-grid"] [data-testid="stLayoutWrapper"]:has(> [class*="st-key-card-"]) > div {width: 100% !important;}
+}
+[class*="st-key-pick-grid"] [data-testid="stLayoutWrapper"]:has(> [class*="st-key-card-"]) {display: flex;}
+.st-key-pick-top {gap: .5rem;}
+.st-key-pick-top [data-testid="stCaptionContainer"] {margin: 0;}
+[data-testid="stPopoverBody"] {min-width: 0 !important; width: 230px !important; padding: .6rem !important;}
+[data-testid="stPopoverBody"] [data-testid="stVerticalBlock"] {gap: .35rem;}
+[data-testid="stPopoverBody"] button {min-height: 2rem; padding: .1rem .5rem;}
+[data-testid="stPopoverBody"] button p {font-size: .85rem;}
+/* game bar: game code, tests meter, menu */
+.st-key-gamebar {gap: .6rem;}
+.st-key-gamebar [data-testid="stMarkdownContainer"] p {margin: 0;}
+.meter {display: inline-flex; align-items: center; gap: .45rem; font-size: .9rem; white-space: nowrap;}
+.meter b {font-variant-numeric: tabular-nums;}
+.i-tube {width: 18px; height: 18px; background: var(--bl-accent);
+          -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cpath%20d%3D%27M8%202h8v2h-1v11.5a3%203%200%200%201-6%200V4H8V2zm3%202v6h2V4h-2z%27/%3E%3Cpath%20d%3D%27M5%2020h14v2H5z%27/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cpath%20d%3D%27M8%202h8v2h-1v11.5a3%203%200%200%201-6%200V4H8V2zm3%202v6h2V4h-2z%27/%3E%3Cpath%20d%3D%27M5%2020h14v2H5z%27/%3E%3C/svg%3E") center / contain no-repeat;}
+.segs {display: inline-flex; gap: 3px;}
+.segs i {width: 18px; height: 9px; border-radius: 3px; border: 1px solid var(--bl-accent); opacity: .45;}
+.segs i.on {background: var(--bl-accent); opacity: 1;}
+.build-title {font-family: Georgia, serif; font-size: 1.55rem; font-weight: 700; margin: .2rem 0 0;}
+/* tree: the 4 couples always stay side by side */
+.st-key-couples {gap: 6px !important;}
+.st-key-couples > div, .st-key-couples > [data-testid="stLayoutWrapper"] {flex: 1 1 0 !important; min-width: 0 !important;}
+[class*="st-key-cbox-"] {container-type: inline-size; padding: .45rem .35rem !important; min-width: 0;}
+.couple-title {font-weight: 700; text-align: center; font-size: .82rem; margin-bottom: .3rem; white-space: nowrap;}
+[class*="st-key-couple-"] {flex-wrap: nowrap !important; width: 100%;}
+[class*="st-key-couple-"] > [data-testid="stLayoutWrapper"] {flex: 0 1 84px !important; max-width: 84px; min-width: 0;}
+[class*="st-key-slot-"]:not([class*="st-key-slot-btn"]) {position: relative; cursor: pointer; width: 100% !important;
+    min-width: 0;}
+.slot-pic {position: relative; width: 100%; transition: transform .12s ease, filter .12s ease;}
+.slot-pic svg {display: block; width: 100%; height: auto;}
+.slot-name {position: absolute; left: 7%; right: 7%; bottom: 8%; padding: 1px 3px; border-radius: 3px;
+             background: rgba(20, 12, 14, .78); color: #f6e7c8; font-size: .68rem; font-weight: 700; text-align: center;
+             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
 [class*="st-key-slot-"]:not([class*="st-key-slot-btn"]):hover .slot-pic {transform: translateY(-3px) scale(1.04);
     filter: drop-shadow(0 6px 8px var(--bl-shadow));}
 [class*="st-key-slot-btn"] {position: absolute !important; inset: 0; z-index: 2; margin: 0 !important;}
 [class*="st-key-slot-btn"] .stButton, [class*="st-key-slot-btn"] button {width: 100% !important; height: 100% !important;}
 [class*="st-key-slot-btn"] button {opacity: 0; cursor: pointer;}
-[class*="st-key-cbox-"] {container-type: inline-size;}
-@container (max-width: 190px) {
+.heart {color: var(--bl-accent); font-size: .95rem; line-height: 1; margin: 0 5px; text-align: center;}
+@container (max-width: 150px) {
   [class*="st-key-couple-"] {flex-direction: column !important;}
-  [class*="st-key-couple-"] .heart {margin: -8px 0 8px !important;}
+  [class*="st-key-couple-"] > [data-testid="stLayoutWrapper"] {flex: 0 0 auto !important; width: 100%;}
+  .heart {margin: 4px 0;}
 }
+.lower {margin-top: -2px;}
+.lower > svg {width: 100%; height: auto; display: block;}
+[class*="st-key-cbox-"] [data-testid="stMarkdownContainer"], .st-key-gamebar [data-testid="stMarkdownContainer"],
+.st-key-birth-row [data-testid="stMarkdownContainer"] {margin-bottom: 0;}
+.st-key-birth-row {gap: .2rem;}
 .st-key-tree-btn button {min-height: 3rem; border: 2px solid var(--bl-accent); color: var(--bl-accent); font-weight: 700;}
 .st-key-tree-btn button p {font-size: 1.05rem;}
-@media (min-width: 641px) {
-  [data-testid="stHorizontalBlock"]:has([class*="st-key-card-"]) {align-items: stretch;}
-  [data-testid="stColumn"]:has(> div > [class*="st-key-card-"]) > div,
-  [data-testid="stColumn"]:has([class*="st-key-card-"]) > [data-testid="stVerticalBlock"],
-  [data-testid="stLayoutWrapper"]:has(> [class*="st-key-card-"]) {height: 100%;}
-  [class*="st-key-card-"] {height: 100%; justify-content: flex-start;}
-  [class*="st-key-card-"] > div:first-child {flex: 1 0 auto;}
-}
-.heart {color: var(--bl-accent); font-size: 1rem; margin: 0 4px 18px;}
 .tree-wrap {overflow-x: auto; -webkit-overflow-scrolling: touch;}
 .tree-wrap svg {min-width: 620px;}
-.tree-wrap.lower {margin-top: -14px;}
 /* result */
 .banner {border-radius: 14px; padding: 1rem 1.2rem; margin: .4rem 0 1rem; text-align: center;}
 .banner h2 {margin: 0; padding: 0;}
@@ -175,7 +220,6 @@ h1, h2, h3, h4 {font-family: Georgia, 'Times New Roman', serif !important;}
   .hero-title {font-size: 2.5rem; letter-spacing: .08em;}
   .hero-pic {width: 70px;}
   .hero-pic:nth-child(4) {width: 86px;}
-  .tree-wrap.lower {margin-top: 0;}
 }
 </style>
 """
@@ -374,7 +418,6 @@ def view_main() -> None:
         st.button(t("menu.ranking"), key="m-ranking", width="stretch", on_click=open_menu, args=("ranking",))
         st.button(t("menu.share"), key="m-share", width="stretch", on_click=open_menu, args=("share",))
         st.link_button(t("menu.source"), settings.get("BLOODLINE_REPO_URL"), width="stretch")
-    st.caption(t("menu.footer", version=__version__))
 
 
 def view_nick() -> None:
@@ -461,7 +504,11 @@ def screen_menu() -> None:
         "ranking": view_ranking,
         "share": view_share,
     }
-    views.get(st.session_state.menu_view, view_main)()
+    # body centred vertically, footer pinned to the bottom (see CSS)
+    with st.container(key="menu-body"):
+        views.get(st.session_state.menu_view, view_main)()
+    with st.container(key="menu-foot"):
+        st.caption(t("menu.footer", version=__version__))
 
 
 # ---------------------------------------------------------------- building
@@ -482,23 +529,27 @@ def on_birth() -> None:
     go("result")
 
 
-def card_body(game: Game, cid: str) -> str:
-    """Portrait, name, status chips, clue and test results of a candidate."""
+def card_body(game: Game, cid: str, slot: int | None = None) -> str:
+    """Portrait, name, clue and test results of a candidate.
+
+    If the candidate already sits in the tree, the portrait is dimmed and a
+    ribbon over it says where. Disease status stays hidden until a test."""
     cfg, lang = game.config, st.session_state.lang
     c = game.candidate(cid)
-    chips = []  # disease status stays hidden until a test reveals it
-    slot = game.slot_of(cid)
-    if slot is not None:
-        chips.append(ui.chip(t("card.placed", n=slot // 2 + 1), "#b8404c"))
+    where = game.slot_of(cid)
+    ribbon, dim = "", ""
+    if where is not None:
+        dim = " placed"
+        label = t("card.here") if where == slot else t("card.placed", n=where // 2 + 1)
+        ribbon = f'<div class="ribbon">{escape(label)}</div>'
     tests = "".join(
         f'<div class="test-line"><span class="dot" style="background:{STATUS_COLORS[res]}"></span>'
         f"{escape(ui.disease_name(cfg, gid, lang))}: <b>{escape(ui.test_label(t, res, c.sex))}</b></div>"
         for gid, res in game.test_results(cid).items()
     )
     return (
-        f'<div class="portrait">{ui.portrait(c, game.model)}</div>'
+        f'<div class="portrait{dim}">{ui.portrait(c, game.model)}{ribbon}</div>'
         f'<div class="card-name">{escape(c.name)}</div>'
-        f'<div class="chips">{"".join(chips)}</div>'
         f'<div class="card-hint">“{escape(ui.hint_text(t, c, cfg, lang))}”</div>'
         f'<div class="tests">{tests}</div>'
     )
@@ -528,22 +579,23 @@ def pick_dialog(slot: int) -> None:
     game: Game = st.session_state.game
     sex = slot_sex(slot)
     current = game.slots[slot]
-    st.caption(t("pick.help", left=game.tests_left))
-    if current is not None and st.button(t("pick.clear")):
+    top = st.container(horizontal=True, vertical_alignment="center", key="pick-top")
+    top.caption(t("pick.help", left=game.tests_left))
+    if current is not None and top.button(t("pick.clear"), key="pick-clear", type="tertiary"):
         game.assign(slot, None)
         st.rerun()
-    people = game.candidates_of(sex)
-    per_row = 5
-    for start in range(0, len(people), per_row):
-        cols = st.columns(per_row)
-        for col, c in zip(cols, people[start : start + per_row]):
-            with col, st.container(border=True, key=f"card-d-{c.id}"):
-                st.markdown(card_body(game, c.id), unsafe_allow_html=True)
-                if c.id == current:
+    with st.container(horizontal=True, wrap=True, gap="small", key="pick-grid"):
+        for c in game.candidates_of(sex):
+            with st.container(border=True, key=f"card-d-{c.id}", width=158, gap=None):
+                st.markdown(card_body(game, c.id, slot), unsafe_allow_html=True)
+                where = game.slot_of(c.id)
+                if where == slot:
                     st.button(t("pick.here"), key=f"pick-{c.id}", width="stretch", disabled=True)
-                elif st.button(t("pick.choose"), key=f"pick-{c.id}", type="primary", width="stretch"):
-                    game.assign(slot, c.id)
-                    st.rerun()
+                else:
+                    label = t("pick.swap") if where is not None else t("pick.choose")
+                    if st.button(label, key=f"pick-{c.id}", type="primary", width="stretch"):
+                        game.assign(slot, c.id)
+                        st.rerun()
                 test_controls(game, c.id, "d-")
 
 
@@ -554,52 +606,63 @@ def open_picker(slot: int) -> None:
 
 
 def founder_slot(game: Game, slot: int) -> None:
-    """A frame of the tree. The whole frame is a (transparent) button."""
+    """A frame of the tree. The whole frame is a (transparent) button and the
+    chosen person's name sits on the portrait, so frame = portrait height."""
     cid = game.slots[slot]
     level, sex = game.generations, slot_sex(slot)
-    with st.container(key=f"slot-{slot}", width=88, gap=None, horizontal_alignment="center"):
+    with st.container(key=f"slot-{slot}", gap=None, horizontal_alignment="center"):
         if cid is None:
             pic, name = ui.empty_slot(level, sex), ""
         else:
             c = game.candidate(cid)
             pic, name = ui.portrait(c, game.model), c.name.split()[0]
-        st.markdown(
-            f'<div class="slot-pic">{pic}</div><div class="slot-name">{escape(name) or "&nbsp;"}</div>',
-            unsafe_allow_html=True,
-        )
+        tag = f'<div class="slot-name">{escape(name)}</div>' if name else ""
+        st.markdown(f'<div class="slot-pic">{pic}{tag}</div>', unsafe_allow_html=True)
         if st.button(t(f"build.pick.{sex}"), key=f"slot-btn-{slot}"):
             open_picker(slot)
+
+
+def tests_meter(left: int, total: int) -> str:
+    segs = "".join(f'<i class="{"on" if i < left else ""}"></i>' for i in range(total))
+    return (
+        f'<div class="meter" title="{escape(t("build.tests_title", left=left, total=total))}">'
+        f'<span class="i-tube"></span><span class="meter-label">{escape(t("build.tests"))}</span>'
+        f'<span class="segs">{segs}</span><b>{left}/{total}</b></div>'
+    )
 
 
 def screen_build() -> None:
     game: Game = st.session_state.game
     cfg = game.config
-    top = st.columns([3, 2, 2], vertical_alignment="center")
-    top[0].markdown(f'{t("build.game")} <span class="seed">#{game.seed:06d}</span>', unsafe_allow_html=True)
-    top[1].markdown(t("build.tests_left", left=game.tests_left, total=cfg.rules.tests_per_game))
-    top[2].button(t("build.menu"), width="stretch", on_click=go, args=("menu",))
+    with st.container(horizontal=True, vertical_alignment="center", horizontal_alignment="distribute",
+                      key="gamebar"):
+        st.markdown(f'{t("build.game")} <span class="seed">#{game.seed:06d}</span>', unsafe_allow_html=True,
+                    width="content")
+        st.markdown(tests_meter(game.tests_left, cfg.rules.tests_per_game), unsafe_allow_html=True,
+                    width="content")
+        st.button(t("build.menu"), key="to-menu", on_click=go, args=("menu",))
 
-    st.markdown(f"### {t('build.title')}")
+    st.markdown(f'<div class="build-title">{t("build.title")}</div>', unsafe_allow_html=True)
     st.caption(t("build.help"))
 
     n_couples = len(game.slots) // 2
-    cols = st.columns(n_couples, gap="small")
-    for k in range(n_couples):
-        with cols[k].container(border=True, horizontal_alignment="center", key=f"cbox-{k}"):
-            st.markdown(f'<div class="couple-title">{t("build.couple", n=k + 1)}</div>', unsafe_allow_html=True)
-            with st.container(
-                horizontal=True, horizontal_alignment="center", vertical_alignment="center", gap=None, key=f"couple-{k}"
-            ):
-                founder_slot(game, 2 * k)
-                st.markdown('<div class="heart">❤</div>', unsafe_allow_html=True)
-                founder_slot(game, 2 * k + 1)
-    st.markdown(f'<div class="tree-wrap lower">{ui.lower_tree(game, t)}</div>', unsafe_allow_html=True)
+    with st.container(horizontal=True, wrap=False, gap=None, key="couples"):
+        for k in range(n_couples):
+            with st.container(border=True, horizontal_alignment="center", gap=None, key=f"cbox-{k}"):
+                st.markdown(f'<div class="couple-title">{t("build.couple", n=k + 1)}</div>',
+                            unsafe_allow_html=True)
+                with st.container(horizontal=True, wrap=False, horizontal_alignment="center",
+                                  vertical_alignment="center", gap=None, key=f"couple-{k}"):
+                    founder_slot(game, 2 * k)
+                    st.markdown('<div class="heart">❤</div>', unsafe_allow_html=True, width="content")
+                    founder_slot(game, 2 * k + 1)
+    st.markdown(f'<div class="lower">{ui.lower_tree(game, t)}</div>', unsafe_allow_html=True)
 
     ready = game.is_complete
-    with st.container(horizontal_alignment="center"):
+    with st.container(horizontal_alignment="center", key="birth-row"):
         st.button(t("build.birth"), key="birth", type="primary", width=300, disabled=not ready, on_click=on_birth)
-    if not ready:
-        st.caption(t("build.birth_help"))
+        if not ready:
+            st.caption(t("build.birth_help"))
 
 
 # ---------------------------------------------------------------- result

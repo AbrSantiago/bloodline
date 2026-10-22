@@ -18,8 +18,8 @@
       "kind": "disease",
       "recessive_freq": 0.7,
       "name": {
-        "es": "Enfermedad 1",
-        "en": "Disease 1"
+        "es": "Tos de Quilmes",
+        "en": "Quilmes Cough"
       }
     },
     {
@@ -27,8 +27,8 @@
       "kind": "disease",
       "recessive_freq": 0.15,
       "name": {
-        "es": "Enfermedad 2",
-        "en": "Disease 2"
+        "es": "Fiebre del Bandoneón",
+        "en": "Bandoneon Fever"
       }
     },
     {
@@ -36,8 +36,8 @@
       "kind": "disease",
       "recessive_freq": 0.1,
       "name": {
-        "es": "Enfermedad 3",
-        "en": "Disease 3"
+        "es": "Síndrome del Mate Frío",
+        "en": "Cold Mate Syndrome"
       }
     },
     {

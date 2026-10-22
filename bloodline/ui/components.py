@@ -91,7 +91,7 @@ def status_of(model: InheritanceModel, person: Person, gene_id: str) -> str:
 
 
 # ---------------------------------------------------------------- trees
-def lower_tree(game: Game, t: T, width: float = 1100) -> str:
+def lower_tree(game: Game, t: T, width: float = 1300) -> str:
     """Grandparents, parents and "me", still unknown while building.
 
     The founders are drawn above it as interactive slots, so this drawing
@@ -106,7 +106,7 @@ def lower_tree(game: Game, t: T, width: float = 1100) -> str:
         for level in range(g - 1, -1, -1)
         for i in range(2**level)
     }
-    return pedigree_svg(nodes, g - 1, spread_width=width, max_width=100_000)
+    return pedigree_svg(nodes, g - 1, spread_width=width, max_width=100_000, row_gap=22, label_px=16)
 
 
 SEX_SYMBOL = {"M": "♂", "F": "♀"}

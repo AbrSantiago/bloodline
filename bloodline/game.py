@@ -84,7 +84,8 @@ class Game:
     def assign(self, slot: int, cid: str | None) -> None:
         """Place a candidate in a founder slot (``None`` empties it).
 
-        A candidate already placed elsewhere moves to the new slot.
+        If the candidate already sits in another slot, the two slots swap
+        their occupants (both slots have the same sex, so it is always valid).
         """
         self._ensure_open()
         if cid is not None:
@@ -92,7 +93,7 @@ class Game:
                 raise ValueError(f"slot {slot} needs sex {slot_sex(slot)}")
             previous = self.slot_of(cid)
             if previous is not None:
-                self.slots[previous] = None
+                self.slots[previous] = self.slots[slot]
         self.slots[slot] = cid
 
     def clear(self) -> None:
