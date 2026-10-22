@@ -16,7 +16,7 @@
     {
       "id": "d1",
       "kind": "disease",
-      "recessive_freq": 0.45,
+      "recessive_freq": 0.7,
       "name": {
         "es": "Enfermedad 1",
         "en": "Disease 1"
@@ -25,7 +25,7 @@
     {
       "id": "d2",
       "kind": "disease",
-      "recessive_freq": 0.4,
+      "recessive_freq": 0.15,
       "name": {
         "es": "Enfermedad 2",
         "en": "Disease 2"
@@ -34,7 +34,7 @@
     {
       "id": "d3",
       "kind": "disease",
-      "recessive_freq": 0.5,
+      "recessive_freq": 0.1,
       "name": {
         "es": "Enfermedad 3",
         "en": "Disease 3"
@@ -165,68 +165,68 @@
   },
   "fun_facts": [
     {
-      "es": "Hacía los mejores ñoquis del barrio.",
-      "en": "Made the best gnocchi in the neighbourhood."
+      "es": "Hacía los mejores ñoquis de todo el barrio.",
+      "en": "Made the best gnocchi in the whole neighbourhood."
     },
     {
-      "es": "Ganó un concurso de tango en 1923.",
-      "en": "Won a tango contest in 1923."
+      "es": "Ganó un concurso de tango en el club en 1923.",
+      "en": "Won the club's tango contest back in 1923."
     },
     {
-      "es": "Nunca perdió un truco en su vida.",
-      "en": "Never lost a game of truco in their life."
+      "es": "Nunca en su vida perdió una partida de truco.",
+      "en": "Never lost a single game of truco in their life."
     },
     {
-      "es": "Cruzó el Atlántico en barco con una valija y un salame.",
-      "en": "Crossed the Atlantic with one suitcase and a salami."
+      "es": "Cruzó el Atlántico con una valija y un salame.",
+      "en": "Crossed the Atlantic with a suitcase and a salami."
     },
     {
-      "es": "Tenía un loro que sabía el himno.",
-      "en": "Had a parrot that knew the national anthem."
+      "es": "Tenía un loro que cantaba el himno completo.",
+      "en": "Had a parrot that could sing the whole anthem."
     },
     {
-      "es": "Atendía el almacén y fiaba a medio pueblo.",
-      "en": "Ran the grocery store and gave credit to half the town."
+      "es": "Atendía el almacén y le fiaba a medio pueblo.",
+      "en": "Ran the store and gave credit to half the town."
     },
     {
       "es": "Tocaba el bandoneón en todos los casamientos.",
-      "en": "Played the bandoneon at every wedding."
+      "en": "Played the bandoneon at every single wedding."
     },
     {
-      "es": "Escribía cartas de amor por encargo.",
-      "en": "Wrote love letters for hire."
+      "es": "Escribía cartas de amor por encargo en el pueblo.",
+      "en": "Wrote love letters for hire for the whole town."
     },
     {
-      "es": "Domaba caballos los domingos.",
-      "en": "Tamed horses on Sundays."
+      "es": "Domaba caballos salvajes todos los domingos.",
+      "en": "Spent every Sunday taming wild horses on the farm."
     },
     {
       "es": "Fue la primera persona del pueblo en tener radio.",
-      "en": "First person in town to own a radio."
+      "en": "Was the first person in town to own a radio."
     },
     {
       "es": "Juraba haber visto un plato volador en 1911.",
-      "en": "Swore they saw a flying saucer in 1911."
+      "en": "Swore they saw a flying saucer back in 1911."
     },
     {
-      "es": "Cocinaba un locro que se olía desde la estación.",
-      "en": "Cooked a stew you could smell from the train station."
+      "es": "Su locro se olía desde la estación de tren.",
+      "en": "Their stew could be smelled from the train station."
     },
     {
-      "es": "Coleccionaba botones de uniformes.",
-      "en": "Collected uniform buttons."
+      "es": "Coleccionaba botones de uniformes militares.",
+      "en": "Collected buttons from old military uniforms."
     },
     {
-      "es": "Le ganó una pulseada al comisario.",
-      "en": "Beat the police chief at arm wrestling."
+      "es": "Le ganó una pulseada al comisario del pueblo.",
+      "en": "Beat the town's police chief at arm wrestling."
     },
     {
       "es": "Plantó el ombú que todavía está en la plaza.",
       "en": "Planted the ombú tree still standing in the square."
     },
     {
-      "es": "Sabía leer las nubes y nunca le erró al pronóstico.",
-      "en": "Could read the clouds and never got the weather wrong."
+      "es": "Leía las nubes y nunca le erró al pronóstico.",
+      "en": "Read the clouds and never got the weather wrong."
     }
   ]
 }

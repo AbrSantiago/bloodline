@@ -34,7 +34,18 @@ Valores disponibles para el dibujo:
 - `hair`: `black`, `brown`, `blond`, `red`
 - `freckles`: `TRUE` / `FALSE`
 
-**Cómo elegir q para las enfermedades.** Con frecuencia q, en la población hay p² sanos sin copias, 2pq portadores y q² enfermos (Hardy-Weinberg, p = 1 − q). Con los valores actuales (0.45, 0.40, 0.50), un árbol armado al azar tiene ≈50% de riesgo y uno armado leyendo las pistas, ≈40%, lo que hace el juego desafiante. Si suben q, el juego se pone más difícil.
+**Cómo elegir q para las enfermedades.** Con frecuencia q, en la población hay p² sanos sin copias, 2pq portadores y q² enfermos (Hardy-Weinberg, p = 1 − q). Con los valores actuales (0.70, 0.15, 0.10), un árbol armado al azar tiene ≈50% de riesgo y uno armado leyendo las pistas, ≈41%. Si suben q, el juego se pone más difícil.
+
+**Por qué una enfermedad común y dos raras.** Para un árbol al azar, el descendiente sigue Hardy-Weinberg: P(derrota) = 1 − ∏(1 − qᵢ²) y P(victoria perfecta) = ∏(1 − qᵢ)². Bajar un q sube la perfecta pero también baja la derrota, así que no se puede subir una sin tocar la otra cambiando un solo q. Lo que sí se puede es **repartir el mismo riesgo de otra forma**: concentrarlo en una enfermedad común duplica la victoria perfecta sin cambiar la derrota.
+
+| q de las 3 enfermedades | Derrota (árbol al azar) | Victoria perfecta (al azar) | Perfecta leyendo pistas |
+|---|---|---|---|
+| 0.45 / 0.40 / 0.50 | 50% | 2.7% | 3.9% |
+| 0.68 / 0.25 / 0.15 | 51% | 4.2% | 6.3% |
+| **0.70 / 0.15 / 0.10** | **51%** | **5.3%** | **8.2%** |
+| una sola enfermedad, q = 0.71 | 50% | 8.4% | — |
+
+El último renglón es el techo teórico: con ≈50% de derrota, la perfecta no puede pasar de ≈8% en un árbol al azar.
 
 ### `game`
 

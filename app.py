@@ -63,10 +63,29 @@ h1, h2, h3, h4 {font-family: Georgia, 'Times New Roman', serif !important;}
 .test-line .dot {margin: 0 .3rem 0 0; width: .6rem; height: .6rem;}
 /* tree */
 .couple-title {font-weight: 700; text-align: center; font-size: .9rem;}
-.slot-pic {width: 80px; margin: 0 auto;}
-[class*="st-key-slot-btn"] button {padding: .2rem .35rem; min-height: 2rem; font-size: .82rem;}
-[class*="st-key-slot-btn"] button p {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-.heart {color: #8c2f39; font-size: 1rem; margin: 0 4px 34px;}
+.slot-pic {width: 80px; margin: 0 auto; transition: transform .12s ease, filter .12s ease;}
+.slot-name {font-size: .8rem; font-weight: 700; text-align: center; white-space: nowrap; overflow: hidden;
+             text-overflow: ellipsis; max-width: 88px; min-height: 1.2rem; margin-top: 2px;}
+[class*="st-key-slot-"]:not([class*="st-key-slot-btn"]) {position: relative; cursor: pointer; min-height: 126px;}
+[class*="st-key-slot-"]:not([class*="st-key-slot-btn"]):hover .slot-pic {transform: translateY(-3px) scale(1.04);
+    filter: drop-shadow(0 6px 8px rgba(60, 20, 20, .35));}
+[class*="st-key-slot-btn"] {position: absolute !important; inset: 0; z-index: 2; margin: 0 !important;}
+[class*="st-key-slot-btn"] .stButton, [class*="st-key-slot-btn"] button {width: 100% !important; height: 100% !important;}
+[class*="st-key-slot-btn"] button {opacity: 0; cursor: pointer;}
+[class*="st-key-cbox-"] {container-type: inline-size;}
+@container (max-width: 190px) {
+  [class*="st-key-couple-"] {flex-direction: column !important;}
+  [class*="st-key-couple-"] .heart {margin: -8px 0 8px !important;}
+}
+.st-key-tree-btn button {min-height: 3rem; border: 2px solid #8c2f39; font-weight: 700;}
+.st-key-tree-btn button p {font-size: 1.05rem;}
+@media (min-width: 641px) {
+  [data-testid="stHorizontalBlock"]:has([class*="st-key-card-"]) {align-items: stretch;}
+  [data-testid="stColumn"]:has(> div > [class*="st-key-card-"]) > div,
+  [data-testid="stColumn"]:has([class*="st-key-card-"]) > [data-testid="stVerticalBlock"] {height: 100%;}
+  [class*="st-key-card-"] {height: 100%; min-height: 455px; justify-content: space-between;}
+}
+.heart {color: #8c2f39; font-size: 1rem; margin: 0 4px 18px;}
 .tree-wrap {overflow-x: auto; -webkit-overflow-scrolling: touch;}
 .tree-wrap svg {min-width: 620px;}
 .tree-wrap.lower {margin-top: -14px;}
@@ -293,7 +312,7 @@ def test_controls(game: Game, cid: str, prefix: str) -> None:
 
 
 def candidate_card(game: Game, cid: str) -> None:
-    with st.container(border=True):
+    with st.container(border=True, key=f"card-g-{cid}"):
         st.markdown(card_body(game, cid), unsafe_allow_html=True)
         test_controls(game, cid, "g-")
 
@@ -312,7 +331,7 @@ def pick_dialog(slot: int) -> None:
     for start in range(0, len(people), per_row):
         cols = st.columns(per_row)
         for col, c in zip(cols, people[start : start + per_row]):
-            with col, st.container(border=True):
+            with col, st.container(border=True, key=f"card-d-{c.id}"):
                 st.markdown(card_body(game, c.id), unsafe_allow_html=True)
                 if c.id == current:
                     st.button(t("pick.here"), key=f"pick-{c.id}", icon="✅", width="stretch", disabled=True)
@@ -329,18 +348,20 @@ def open_picker(slot: int) -> None:
 
 
 def founder_slot(game: Game, slot: int) -> None:
+    """A frame of the tree. The whole frame is a (transparent) button."""
     cid = game.slots[slot]
-    level = game.generations
-    with st.container(width=88, gap="small", horizontal_alignment="center"):
-        sex = slot_sex(slot)
+    level, sex = game.generations, slot_sex(slot)
+    with st.container(key=f"slot-{slot}", width=88, gap=None, horizontal_alignment="center"):
         if cid is None:
-            st.markdown(f'<div class="slot-pic">{ui.empty_slot(level, sex)}</div>', unsafe_allow_html=True)
-            label = f"{SEX_MD[sex]} {t('build.choose')}"
+            pic, name = ui.empty_slot(level, sex), ""
         else:
             c = game.candidate(cid)
-            st.markdown(f'<div class="slot-pic">{ui.portrait(c, game.model)}</div>', unsafe_allow_html=True)
-            label = f"{SEX_MD[sex]} {c.name.split()[0]}"
-        if st.button(label, key=f"slot-btn-{slot}", width="stretch"):
+            pic, name = ui.portrait(c, game.model), c.name.split()[0]
+        st.markdown(
+            f'<div class="slot-pic">{pic}</div><div class="slot-name">{escape(name) or "&nbsp;"}</div>',
+            unsafe_allow_html=True,
+        )
+        if st.button(t(f"build.pick.{sex}"), key=f"slot-btn-{slot}"):
             open_picker(slot)
 
 
@@ -358,9 +379,11 @@ def screen_build() -> None:
     n_couples = len(game.slots) // 2
     cols = st.columns(n_couples, gap="small")
     for k in range(n_couples):
-        with cols[k].container(border=True, horizontal_alignment="center"):
+        with cols[k].container(border=True, horizontal_alignment="center", key=f"cbox-{k}"):
             st.markdown(f'<div class="couple-title">{t("build.couple", n=k + 1)}</div>', unsafe_allow_html=True)
-            with st.container(horizontal=True, horizontal_alignment="center", vertical_alignment="center", gap=None):
+            with st.container(
+                horizontal=True, horizontal_alignment="center", vertical_alignment="center", gap=None, key=f"couple-{k}"
+            ):
                 founder_slot(game, 2 * k)
                 st.markdown('<div class="heart">❤</div>', unsafe_allow_html=True)
                 founder_slot(game, 2 * k + 1)
@@ -447,7 +470,16 @@ def screen_result() -> None:
         elif result.outcome != "loss" and risk.p_loss > 0.55:
             st.info(t("result.good_luck"), icon="🍀")
 
-    st.toggle(t("result.show_tree"), key="show_tree")
+    with st.container(horizontal_alignment="center"):
+        shown = st.session_state.show_tree
+        st.button(
+            t("result.hide_tree") if shown else t("result.show_tree"),
+            key="tree-btn",
+            icon="🌳",
+            type="secondary",
+            width=340,
+            on_click=lambda: st.session_state.update(show_tree=not st.session_state.show_tree),
+        )
     if st.session_state.show_tree:
         st.markdown(f'<div class="legend">👆 {t("result.tree_hint")}</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="tree-wrap">{ui.full_tree(game, result, t, lang)}</div>', unsafe_allow_html=True)

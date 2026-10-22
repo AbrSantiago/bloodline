@@ -198,7 +198,9 @@ def outcome(genome):
 labels = ["perfecta", "victoria", "derrota"]
 expected = np.array([report.p_perfect, report.p_win_carrier, report.p_loss])
 counts = pd.Series([outcome(s) for s in sims]).value_counts().reindex(labels, fill_value=0).to_numpy()
-chi = stats.chisquare(counts, M * expected)
+possible = expected > 0  # outcomes with probability 0 must never appear and are left out of the test
+assert counts[~possible].sum() == 0
+chi = stats.chisquare(counts[possible], M * expected[possible])
 print("exacto  :", {k: round(float(v), 4) for k, v in zip(labels, expected)})
 print("simulado:", {k: round(float(v), 4) for k, v in zip(labels, counts / M)})
 print(f"chi2 = {chi.statistic:.2f}, p-valor = {chi.pvalue:.3f}")
