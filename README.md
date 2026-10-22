@@ -88,6 +88,7 @@ Settings are read from environment variables (a local `.env` is loaded automatic
 | Key | Default | What it does |
 |---|---|---|
 | `BLOODLINE_PUBLIC_URL` | `http://localhost:8501` | Public address, used for the share QR and challenge links |
+| `BLOODLINE_REPO_URL` | this repo | Opened by the "Source code" menu option |
 | `BLOODLINE_STORAGE` | `csv` | Where finished games are stored: `csv` or `gsheets` |
 | `BLOODLINE_CSV_PATH` | `.data/results.csv` | CSV file for local development |
 | `GSHEETS_RESULTS_SPREADSHEET_ID` | | Google Sheet that stores the results (leaderboard) |

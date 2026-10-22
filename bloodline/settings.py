@@ -24,6 +24,7 @@ DEFAULTS = {
     "BLOODLINE_STORAGE": "csv",  # "csv" or "gsheets"
     "BLOODLINE_CSV_PATH": ".data/results.csv",
     "BLOODLINE_PUBLIC_URL": "http://localhost:8501",
+    "BLOODLINE_REPO_URL": "https://github.com/AbrSantiago/bloodline",
     "GSHEETS_RESULTS_SPREADSHEET_ID": "",
     "GSHEETS_RESULTS_WORKSHEET": "results",
     "GOOGLE_SERVICE_ACCOUNT_JSON": "",
