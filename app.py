@@ -28,18 +28,31 @@ st.set_page_config(page_title="Bloodline", page_icon=str(ASSETS / "icon.png"), l
 
 CSS = """
 <style>
+/* palette: every color reacts to Streamlit's light/dark theme via light-dark() */
+.stApp {
+  --bl-text: light-dark(#2b2420, #f1e6d6);
+  --bl-muted: light-dark(#6b6158, #b3a491);
+  --bl-hint: light-dark(#5d5349, #cdbfab);
+  --bl-accent: light-dark(#8c2f39, #e07c86);
+  --bl-accent-deep: light-dark(#5e1d26, #4a131b);
+  --bl-gold: light-dark(#b8892f, #d9b25c);
+  --bl-line: light-dark(#8a7f73, #8c7e6d);
+  --bl-surface: light-dark(#fffaf0, #2b2023);
+  --bl-ring: light-dark(#ffffff, #1a1315);
+  --bl-shadow: light-dark(rgba(60, 20, 20, .25), rgba(0, 0, 0, .6));
+}
 .block-container {max-width: 1120px; padding-top: 3.6rem;}
 h1, h2, h3, h4 {font-family: Georgia, 'Times New Roman', serif !important;}
 .stButton button[kind="primary"] {font-weight: 700; letter-spacing: .03em;}
 .st-key-play button {min-height: 3.4rem; font-size: 1.3rem; letter-spacing: .18em;
-                     box-shadow: 0 6px 0 #5e1d26, 0 10px 18px rgba(90, 30, 40, .3);}
+                     box-shadow: 0 6px 0 var(--bl-accent-deep), 0 10px 18px var(--bl-shadow);}
 .st-key-play button p {font-size: 1.3rem;}
 .st-key-birth button {min-height: 3rem; letter-spacing: .12em;}
 .st-key-birth button p {font-size: 1.15rem;}
 /* menu */
 .hero {position: relative; overflow: hidden; margin-top: 12px; border-radius: 22px; padding: 26px 12px 24px; text-align: center;
        background: radial-gradient(120% 90% at 50% 0%, #7a2a36 0%, #3b1a20 60%, #24100f 100%); color: #f6e7c8;
-       box-shadow: inset 0 0 0 5px #b8892f, inset 0 0 0 8px #6e4a17, 0 10px 24px rgba(60, 20, 20, .25);}
+       box-shadow: inset 0 0 0 5px #b8892f, inset 0 0 0 8px #6e4a17, 0 10px 24px var(--bl-shadow);}
 .hero-gallery {display: flex; justify-content: center; gap: 12px; margin: 4px 0 10px;}
 .hero-pic {flex: 0 0 auto; width: 92px; transform: rotate(var(--r));
            filter: drop-shadow(0 6px 8px rgba(0, 0, 0, .45));}
@@ -49,17 +62,18 @@ h1, h2, h3, h4 {font-family: Georgia, 'Times New Roman', serif !important;}
 .hero-tag {font-family: Georgia, serif; font-style: italic; font-size: 1.3rem; margin-top: 2px;}
 .hero-intro {max-width: 620px; margin: 10px auto 0; font-size: .98rem; color: #ead9b8;}
 .section-title {font-family: Georgia, serif; font-size: 1.45rem; font-weight: 700; margin: 1.2rem 0 .2rem;}
-.challenge {text-align: center; font-weight: 700; color: #8c2f39;}
+.challenge {text-align: center; font-weight: 700; color: var(--bl-accent);}
 /* cards */
 .portrait {max-width: 150px; margin: 0 auto;}
 .portrait-big {max-width: 230px; margin: 0 auto;}
 .card-name {text-align: center; font-weight: 700; margin: .35rem 0 .15rem; font-size: 1rem; overflow-wrap: anywhere;}
-.card-hint {font-style: italic; color: #5d5349; font-size: .88rem; text-align: center; overflow-wrap: anywhere;}
+.card-hint {font-style: italic; color: var(--bl-hint); font-size: .88rem; text-align: center; overflow-wrap: anywhere;}
 .chip {display: inline-block; max-width: 100%; border: 1px solid; border-radius: 999px; padding: .05rem .55rem;
        font-size: .78rem; margin: .1rem .1rem; white-space: normal; overflow-wrap: anywhere; line-height: 1.35;}
 .chips {text-align: center; margin: .2rem 0;}
 .tests {margin-top: .35rem;}
-[class*="st-key-card-"] {gap: .45rem;}
+[class*="st-key-card-"] {gap: .4rem; padding: .6rem .6rem .65rem !important;}
+[class*="st-key-card-"] .portrait {max-width: 132px;}
 [class*="st-key-card-"] [data-testid="stMarkdownContainer"] {margin-bottom: 0;}
 .card-hint {margin-bottom: .1rem;}
 .test-line {font-size: .8rem; line-height: 1.35; text-align: center; overflow-wrap: anywhere;}
@@ -71,7 +85,7 @@ h1, h2, h3, h4 {font-family: Georgia, 'Times New Roman', serif !important;}
              text-overflow: ellipsis; max-width: 88px; min-height: 1.2rem; margin-top: 2px;}
 [class*="st-key-slot-"]:not([class*="st-key-slot-btn"]) {position: relative; cursor: pointer; min-height: 126px;}
 [class*="st-key-slot-"]:not([class*="st-key-slot-btn"]):hover .slot-pic {transform: translateY(-3px) scale(1.04);
-    filter: drop-shadow(0 6px 8px rgba(60, 20, 20, .35));}
+    filter: drop-shadow(0 6px 8px var(--bl-shadow));}
 [class*="st-key-slot-btn"] {position: absolute !important; inset: 0; z-index: 2; margin: 0 !important;}
 [class*="st-key-slot-btn"] .stButton, [class*="st-key-slot-btn"] button {width: 100% !important; height: 100% !important;}
 [class*="st-key-slot-btn"] button {opacity: 0; cursor: pointer;}
@@ -80,7 +94,7 @@ h1, h2, h3, h4 {font-family: Georgia, 'Times New Roman', serif !important;}
   [class*="st-key-couple-"] {flex-direction: column !important;}
   [class*="st-key-couple-"] .heart {margin: -8px 0 8px !important;}
 }
-.st-key-tree-btn button {min-height: 3rem; border: 2px solid #8c2f39; font-weight: 700;}
+.st-key-tree-btn button {min-height: 3rem; border: 2px solid var(--bl-accent); color: var(--bl-accent); font-weight: 700;}
 .st-key-tree-btn button p {font-size: 1.05rem;}
 @media (min-width: 641px) {
   [data-testid="stHorizontalBlock"]:has([class*="st-key-card-"]) {align-items: stretch;}
@@ -90,7 +104,7 @@ h1, h2, h3, h4 {font-family: Georgia, 'Times New Roman', serif !important;}
   [class*="st-key-card-"] {height: 100%; justify-content: flex-start;}
   [class*="st-key-card-"] > div:first-child {flex: 1 0 auto;}
 }
-.heart {color: #8c2f39; font-size: 1rem; margin: 0 4px 18px;}
+.heart {color: var(--bl-accent); font-size: 1rem; margin: 0 4px 18px;}
 .tree-wrap {overflow-x: auto; -webkit-overflow-scrolling: touch;}
 .tree-wrap svg {min-width: 620px;}
 .tree-wrap.lower {margin-top: -14px;}
@@ -98,9 +112,9 @@ h1, h2, h3, h4 {font-family: Georgia, 'Times New Roman', serif !important;}
 .banner {border-radius: 14px; padding: 1rem 1.2rem; margin: .4rem 0 1rem; text-align: center;}
 .banner h2 {margin: 0; padding: 0;}
 .banner p {margin: .3rem 0 0;}
-.legend {font-size: .85rem; text-align: center; margin-top: .4rem; color: #6b6158;}
+.legend {font-size: .85rem; text-align: center; margin-top: .4rem; color: var(--bl-muted);}
 .brand {display: flex; align-items: center; gap: .55rem; font-family: Georgia, serif; font-weight: 700;
-        font-size: 2rem; color: #2b2420;}
+        font-size: 2rem; color: var(--bl-text);}
 .brand-logo svg {width: 2.3rem; height: 2.3rem; display: block;}
 .hero-logo svg {width: .82em; height: .82em; vertical-align: -0.08em; margin-right: .18em;
                 filter: drop-shadow(0 3px 6px rgba(0, 0, 0, .45));}
@@ -281,7 +295,7 @@ def card_body(game: Game, cid: str) -> str:
     chips = []  # disease status stays hidden until a test reveals it
     slot = game.slot_of(cid)
     if slot is not None:
-        chips.append(ui.chip(t("card.placed", n=slot // 2 + 1), "#8c2f39"))
+        chips.append(ui.chip(t("card.placed", n=slot // 2 + 1), "#b8404c"))
     tests = "".join(
         f'<div class="test-line"><span class="dot" style="background:{STATUS_COLORS[res]}"></span>'
         f"{escape(ui.disease_name(cfg, gid, lang))}: <b>{escape(ui.test_label(t, res, c.sex))}</b></div>"
@@ -302,7 +316,6 @@ def test_controls(game: Game, cid: str, prefix: str) -> None:
         st.button(
             t("card.test_all"),
             key=f"{prefix}test-{cid}",
-            icon="🧪",
             width="stretch",
             disabled=not game.can_test(cid),
             on_click=on_test,
@@ -310,7 +323,7 @@ def test_controls(game: Game, cid: str, prefix: str) -> None:
         )
         return
     pending = [d for d in cfg.diseases if game.can_test(cid, d.id)]
-    with st.popover(t("card.test"), icon="🧪", width="stretch", disabled=not pending, key=f"{prefix}pop-{cid}"):
+    with st.popover(t("card.test"), width="stretch", disabled=not pending, key=f"{prefix}pop-{cid}"):
         st.caption(t("card.test_pick", left=game.tests_left))
         for d in pending:
             st.button(d.label(lang), key=f"{prefix}test-{cid}-{d.id}", width="stretch", on_click=on_test, args=(cid, d.id))

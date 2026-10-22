@@ -1,15 +1,25 @@
-[theme]
-base = "light"
+# Both palettes are defined: the app follows the visitor's system setting,
+# and anyone can switch from the ⋮ menu (System / Light / Dark).
+# Custom colors in app.py follow along through CSS light-dark().
+
+[theme.light]
 primaryColor = "#8c2f39"
 backgroundColor = "#f6f1e7"
 secondaryBackgroundColor = "#ece4d6"
 textColor = "#2b2420"
 
+[theme.dark]
+primaryColor = "#b8404c"
+backgroundColor = "#1a1315"
+secondaryBackgroundColor = "#2b2023"
+textColor = "#f1e6d6"
+
 [server]
 headless = true
 
 [client]
-toolbarMode = "minimal"
+# "viewer" hides developer options (like Deploy) but keeps the theme switcher.
+toolbarMode = "viewer"
 
 [browser]
 gatherUsageStats = false

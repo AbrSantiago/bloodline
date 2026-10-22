@@ -101,7 +101,7 @@ def pedigree_svg(
         if node.highlight:
             group.append(
                 f'<rect x="{x - 5:.1f}" y="{y - 5:.1f}" width="{PORTRAIT_W + 10}" height="{PORTRAIT_H + 10}" '
-                'rx="10" fill="none" stroke="#8c2f39" stroke-width="3" stroke-dasharray="6 4"/>'
+                'rx="10" fill="none" stroke-width="3" stroke-dasharray="6 4" class="hl"/>'
             )
         group.append(_place(node.svg, x, y, PORTRAIT_W))
         label_y = y + PORTRAIT_H + (20 if node.highlight else 14)
@@ -115,7 +115,7 @@ def pedigree_svg(
                 dx = cx + (j - (n - 1) / 2) * 14
                 group.append(
                     f'<circle cx="{dx:.1f}" cy="{label_y + 13:.1f}" r="5" fill="{STATUS_COLORS[status]}" '
-                    'stroke="#ffffff" stroke-width="1.2"/>'
+                    'stroke-width="1.2" class="ring"/>'
                 )
         if node.tip_lines:
             nid, tid = f"{uid}n{k}", f"{uid}t{k}"
@@ -128,10 +128,12 @@ def pedigree_svg(
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width:.0f} {height:.0f}" '
         f'style="width:100%;max-width:{max_width}px;height:auto;display:block;margin:0 auto" role="img">'
-        "<style>.lbl{font:600 13px system-ui,sans-serif;fill:#2b2420}"
-        ".ln path{stroke:#8a7f73;stroke-width:2.5;fill:none;stroke-linecap:round}"
+        "<style>.lbl{font:600 13px system-ui,sans-serif;fill:var(--bl-text,#2b2420)}"
+        ".ln path{stroke:var(--bl-line,#8a7f73);stroke-width:2.5;fill:none;stroke-linecap:round}"
+        ".hl{stroke:var(--bl-accent,#8c2f39)}.ring{stroke:var(--bl-ring,#fff)}"
+        ".tip rect{fill:var(--bl-surface,#fffaf0);stroke:var(--bl-gold,#b8892f)}"
         ".node{cursor:help;outline:none}.tip{display:none;pointer-events:none}"
-        ".tip text{font:15px system-ui,sans-serif;fill:#2b2420}.tip .tt{font-weight:700}"
+        ".tip text{font:15px system-ui,sans-serif;fill:var(--bl-text,#2b2420)}.tip .tt{font-weight:700}"
         f"{''.join(rules)}</style>"
         f'<g class="ln">{"".join(lines)}</g>{"".join(portraits)}{"".join(tips)}</svg>'
     )
@@ -143,8 +145,8 @@ def _tip(tid: str, node: NodeView, cx: float, y: float, label_y: float, width: f
     tx = min(max(cx - TIP_W / 2, 4), width - TIP_W - 4)
     ty = label_y + 26 if below else y - h - 8
     parts = [
-        f'<rect x="{tx:.1f}" y="{ty:.1f}" width="{TIP_W}" height="{h}" rx="10" fill="#fffaf0" '
-        'stroke="#b8892f" stroke-width="2" style="filter:drop-shadow(0 4px 8px rgba(0,0,0,.25))"/>',
+        f'<rect x="{tx:.1f}" y="{ty:.1f}" width="{TIP_W}" height="{h}" rx="10" stroke-width="2" '
+        'style="filter:drop-shadow(0 4px 8px rgba(0,0,0,.3))"/>',
         f'<text class="tt" x="{tx + TIP_PAD:.1f}" y="{ty + TIP_PAD + 16:.1f}">{escape(node.tip_title)}</text>',
     ]
     for i, (status, text) in enumerate(node.tip_lines):

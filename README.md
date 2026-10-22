@@ -23,6 +23,8 @@ Built for the *Trabajo Práctico clase 4: Funciones de distribución* (UNQ). The
 
 At the end the game shows your **risk**: the exact probability of being born sick with the tree you built. Full rules in Spanish: [`docs/reglas.md`](docs/reglas.md).
 
+The game has a light and a dark theme. It follows the visitor's system setting and can be switched from the ⋮ menu (System / Light / Dark); the palettes live in [`.streamlit/config.toml`](.streamlit/config.toml) and the custom colors in `app.py` follow them through CSS `light-dark()`.
+
 Every game has a **game code** (its random seed). Share the link `…/?seed=4821` and your friend plays exactly the same game.
 
 ## Why the multinomial distribution

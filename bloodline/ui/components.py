@@ -156,7 +156,7 @@ def qr_svg(url: str) -> str:
 
 def chip(text: str, color: str) -> str:
     return (
-        f'<span class="chip" style="background:{color}22;border-color:{color};color:#2b2420">'
+        f'<span class="chip" style="background:{color}22;border-color:{color};color:var(--bl-text, #2b2420)">'
         f"{escape(text)}</span>"
     )
 
