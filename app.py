@@ -316,12 +316,6 @@ def test_controls(game: Game, cid: str, prefix: str) -> None:
             st.button(d.label(lang), key=f"{prefix}test-{cid}-{d.id}", width="stretch", on_click=on_test, args=(cid, d.id))
 
 
-def candidate_card(game: Game, cid: str) -> None:
-    with st.container(border=True, key=f"card-g-{cid}"):
-        st.markdown(card_body(game, cid), unsafe_allow_html=True)
-        test_controls(game, cid, "g-")
-
-
 def pick_dialog(slot: int) -> None:
     """Modal opened by tapping a slot of the tree: choose who goes there."""
     game: Game = st.session_state.game
@@ -399,19 +393,6 @@ def screen_build() -> None:
         st.button(t("build.birth"), key="birth", type="primary", width=300, disabled=not ready, on_click=on_birth)
     if not ready:
         st.caption(t("build.birth_help"))
-
-    st.markdown(f"#### {t('build.candidates')}")
-    st.caption(t("build.candidates_help"))
-    tabs = st.tabs([f"{SEX_MD['M']} {t('build.tab.M')}", f"{SEX_MD['F']} {t('build.tab.F')}"])
-    for tab, sex in zip(tabs, ("M", "F")):
-        with tab:
-            people = game.candidates_of(sex)
-            per_row = 5
-            for start in range(0, len(people), per_row):
-                cols = st.columns(per_row)
-                for col, c in zip(cols, people[start : start + per_row]):
-                    with col:
-                        candidate_card(game, c.id)
 
 
 # ---------------------------------------------------------------- result
