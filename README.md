@@ -2,6 +2,8 @@
 
 **Pick your great-grandparents wisely.** An educational game about Mendelian inheritance: hidden carriers, multinomial simulation and a bit of bad luck.
 
+**Play it: [bloodline.streamlit.app](https://bloodline.streamlit.app/)**
+
 You choose 8 great-grandparents from a pool of 20 candidates and decide who marries whom. Grandparents, parents and finally *you* are born at random. If you are born free of the 3 hereditary diseases, you win. The catch: carriers look perfectly healthy.
 
 Built for the *Trabajo Práctico clase 4: Funciones de distribución* (UNQ). The UI is in Spanish and English; the code is in English.
@@ -104,6 +106,12 @@ Never commit `.env` or `.streamlit/secrets.toml`: both are git-ignored. On Strea
 3. Set `BLOODLINE_STORAGE=gsheets`, the sheet id and the credentials.
 
 The CSV store works for local play, but Streamlit Community Cloud wipes its disk on every restart, so use Google Sheets in production.
+
+Tip: to test the Google Sheets store locally without touching the production ranking, point `GSHEETS_RESULTS_WORKSHEET` to another tab (for example `dev`); it is created automatically.
+
+### Deploy
+
+The game runs on Streamlit Community Cloud at <https://bloodline.streamlit.app/> and redeploys automatically on every push to `main`. Apps without visitors fall asleep after a while, so open it a few minutes before playing in class.
 
 ## Biology data
 

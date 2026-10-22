@@ -23,6 +23,9 @@ parents and "Yo" are born at random; the goal is for Yo to be born without the
 - Deliverables: notebook (`notebooks/validation.ipynb`), 1-page rules
   (`docs/reglas.md`), 5-minute presentation, validation report.
 - Public repo: github.com/AbrSantiago/bloodline (GPL-3.0).
+- Deployed on Streamlit Community Cloud: https://bloodline.streamlit.app/
+  (auto-redeploys on every push to `main`; the disk is wiped on each
+  redeploy, so production results must live in Google Sheets).
 
 ## Game and model decisions (and why)
 
@@ -97,12 +100,10 @@ parents and "Yo" are born at random; the goal is for Yo to be born without the
 
 ## Pending
 
-1. Deploy on Streamlit Community Cloud (set `BLOODLINE_PUBLIC_URL` so QR and
-   share links point to the public URL).
-2. Google Sheets for results: create the service account, share the sheet,
+1. Google Sheets for results: create the service account, share the sheet,
    test `GSheetsStore` with real credentials (`BLOODLINE_STORAGE=gsheets`).
-3. Validation report and the 5-minute presentation (based on the notebook).
-4. Partner's biology data: import with `scripts/sheet_sync.py`, re-run the
+2. Validation report and the 5-minute presentation (based on the notebook).
+3. Partner's biology data: import with `scripts/sheet_sync.py`, re-run the
    notebook, recheck the outcome balance.
 
 ## V2 roadmap (documented, not planned for the TP)
