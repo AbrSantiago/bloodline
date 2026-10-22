@@ -300,14 +300,14 @@ def _sick_overlay() -> str:
     )
 
 
-def render_unknown(generation: str, size: int | None = 160, label: str = "?") -> str:
+def render_unknown(generation: str, size: int | None = 160, label: str = "?", color: str = "#ffffff") -> str:
     """Placeholder portrait for a person not chosen or not yet revealed."""
     bg, frame = _frame(generation)
     cid = f"u{next(_ids)}"
     body = (
         f'<path d="{SHOULDERS}" fill="#000" opacity="0.18"/>'
         '<ellipse cx="100" cy="108" rx="46" ry="52" fill="#000" opacity="0.18"/>'
-        f'<text x="100" y="128" text-anchor="middle" font-family="Georgia, serif" font-size="64" fill="#ffffff" opacity="0.85">{label}</text>'
+        f'<text x="100" y="128" text-anchor="middle" font-family="Georgia, Segoe UI Symbol, DejaVu Sans, serif" font-size="64" font-weight="700" fill="{color}" opacity="0.9">{label}</text>'
     )
     dims = f' width="{size}" height="{size * 1.25:.0f}"' if size else ""
     return (

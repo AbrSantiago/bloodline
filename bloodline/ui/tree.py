@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import itertools
 import re
 from dataclasses import dataclass, field
 from html import escape
@@ -14,6 +15,11 @@ MARGIN = 16
 LABEL_H = 34
 ROW_GAP = 46
 
+_ids = itertools.count()
+TIP_W = 230
+TIP_LINE = 24
+TIP_PAD = 12
+
 STATUS_COLORS = {"clear": "#3f9d5a", "carrier": "#e2a72e", "affected": "#d83a3a", "unknown": "#c9c2b6"}
 
 
@@ -23,6 +29,8 @@ class NodeView:
     label: str = ""
     dots: list[str] = field(default_factory=list)  # status names per disease
     highlight: bool = False
+    tip_title: str = ""  # hover card: heading
+    tip_lines: list[tuple[str, str]] = field(default_factory=list)  # (status, text) per disease
 
 
 def _place(svg: str, x: float, y: float, w: float) -> str:
@@ -84,33 +92,63 @@ def pedigree_svg(
                 f'M{xm:.1f},{top(level) + PORTRAIT_H + LABEL_H + 2:.1f} V{top(level - 1) - 4:.1f}"/>'
             )
 
-    for (level, index), node in nodes.items():
+    uid = f"pd{next(_ids)}"
+    tips, rules = [], []
+    for k, ((level, index), node) in enumerate(nodes.items()):
         cx = centers[level][index]
         x, y = cx - PORTRAIT_W / 2, top(level)
+        group = []
         if node.highlight:
-            portraits.append(
+            group.append(
                 f'<rect x="{x - 5:.1f}" y="{y - 5:.1f}" width="{PORTRAIT_W + 10}" height="{PORTRAIT_H + 10}" '
                 'rx="10" fill="none" stroke="#8c2f39" stroke-width="3" stroke-dasharray="6 4"/>'
             )
-        portraits.append(_place(node.svg, x, y, PORTRAIT_W))
+        group.append(_place(node.svg, x, y, PORTRAIT_W))
         label_y = y + PORTRAIT_H + (20 if node.highlight else 14)
         if node.label:
-            portraits.append(
+            group.append(
                 f'<text x="{cx:.1f}" y="{label_y:.1f}" text-anchor="middle" class="lbl">{escape(node.label)}</text>'
             )
         if node.dots:
             n = len(node.dots)
             for j, status in enumerate(node.dots):
                 dx = cx + (j - (n - 1) / 2) * 14
-                portraits.append(
+                group.append(
                     f'<circle cx="{dx:.1f}" cy="{label_y + 13:.1f}" r="5" fill="{STATUS_COLORS[status]}" '
                     'stroke="#ffffff" stroke-width="1.2"/>'
                 )
+        if node.tip_lines:
+            nid, tid = f"{uid}n{k}", f"{uid}t{k}"
+            portraits.append(f'<g id="{nid}" class="node" tabindex="0">{"".join(group)}</g>')
+            tips.append(_tip(tid, node, cx, y, label_y, width, below=level > 0))
+            rules.append(f"svg:has(#{nid}:hover) #{tid},svg:has(#{nid}:focus) #{tid}{{display:inline}}")
+        else:
+            portraits.extend(group)
 
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width:.0f} {height:.0f}" '
         f'style="width:100%;max-width:{max_width}px;height:auto;display:block;margin:0 auto" role="img">'
         "<style>.lbl{font:600 13px system-ui,sans-serif;fill:#2b2420}"
-        ".ln path{stroke:#8a7f73;stroke-width:2.5;fill:none;stroke-linecap:round}</style>"
-        f'<g class="ln">{"".join(lines)}</g>{"".join(portraits)}</svg>'
+        ".ln path{stroke:#8a7f73;stroke-width:2.5;fill:none;stroke-linecap:round}"
+        ".node{cursor:help;outline:none}.tip{display:none;pointer-events:none}"
+        ".tip text{font:15px system-ui,sans-serif;fill:#2b2420}.tip .tt{font-weight:700}"
+        f"{''.join(rules)}</style>"
+        f'<g class="ln">{"".join(lines)}</g>{"".join(portraits)}{"".join(tips)}</svg>'
     )
+
+
+def _tip(tid: str, node: NodeView, cx: float, y: float, label_y: float, width: float, below: bool) -> str:
+    """Small card with the status of every disease, shown on hover/tap."""
+    h = TIP_PAD * 2 + TIP_LINE * (len(node.tip_lines) + 1)
+    tx = min(max(cx - TIP_W / 2, 4), width - TIP_W - 4)
+    ty = label_y + 26 if below else y - h - 8
+    parts = [
+        f'<rect x="{tx:.1f}" y="{ty:.1f}" width="{TIP_W}" height="{h}" rx="10" fill="#fffaf0" '
+        'stroke="#b8892f" stroke-width="2" style="filter:drop-shadow(0 4px 8px rgba(0,0,0,.25))"/>',
+        f'<text class="tt" x="{tx + TIP_PAD:.1f}" y="{ty + TIP_PAD + 16:.1f}">{escape(node.tip_title)}</text>',
+    ]
+    for i, (status, text) in enumerate(node.tip_lines):
+        ly = ty + TIP_PAD + TIP_LINE * (i + 1) + 16
+        parts.append(f'<circle cx="{tx + TIP_PAD + 6:.1f}" cy="{ly - 5:.1f}" r="6" fill="{STATUS_COLORS[status]}"/>')
+        parts.append(f'<text x="{tx + TIP_PAD + 20:.1f}" y="{ly:.1f}">{escape(text)}</text>')
+    return f'<g id="{tid}" class="tip">{"".join(parts)}</g>'

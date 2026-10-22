@@ -1,4 +1,4 @@
-# 🧬 Bloodline
+# <img src="assets/logo.svg" width="34" alt=""> Bloodline
 
 **Pick your great-grandparents wisely.** An educational game about Mendelian inheritance: hidden carriers, multinomial simulation and a bit of bad luck.
 
@@ -129,6 +129,7 @@ bloodline/
   i18n/                    es.json, en.json
   storage/                 CSV and Google Sheets result stores
   ranking.py               leaderboard
+assets/                    logo (SVG) and favicon
 data/config.json           biology parameters (generated from the spreadsheet)
 notebooks/                 validation notebook
 scripts/sheet_sync.py      spreadsheet <-> config.json

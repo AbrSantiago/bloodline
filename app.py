@@ -7,6 +7,7 @@ Run locally with ``streamlit run app.py``. All game logic lives in the
 from __future__ import annotations
 
 from html import escape
+from pathlib import Path
 
 import streamlit as st
 
@@ -19,7 +20,11 @@ from bloodline.storage import get_store
 from bloodline.ui import components as ui
 from bloodline.ui.tree import STATUS_COLORS
 
-st.set_page_config(page_title="Bloodline", page_icon="🧬", layout="wide")
+ASSETS = Path(__file__).resolve().parent / "assets"
+LOGO_SVG = (ASSETS / "logo.svg").read_text(encoding="utf-8")
+SEX_MD = {"M": ":blue[**♂**]", "F": ":violet[**♀**]"}
+
+st.set_page_config(page_title="Bloodline", page_icon=str(ASSETS / "icon.png"), layout="wide")
 
 CSS = """
 <style>
@@ -67,7 +72,12 @@ h1, h2, h3, h4 {font-family: Georgia, 'Times New Roman', serif !important;}
 .banner {border-radius: 14px; padding: 1rem 1.2rem; margin: .4rem 0 1rem; text-align: center;}
 .banner h2 {margin: 0; padding: 0;}
 .banner p {margin: .3rem 0 0;}
-.legend {font-size: .85rem; text-align: center; margin-top: .4rem;}
+.legend {font-size: .85rem; text-align: center; margin-top: .4rem; color: #6b6158;}
+.brand {display: flex; align-items: center; gap: .55rem; font-family: Georgia, serif; font-weight: 700;
+        font-size: 2rem; color: #2b2420;}
+.brand-logo svg {width: 2.3rem; height: 2.3rem; display: block;}
+.hero-logo svg {width: .82em; height: .82em; vertical-align: -0.08em; margin-right: .18em;
+                filter: drop-shadow(0 3px 6px rgba(0, 0, 0, .45));}
 .dot {display: inline-block; width: .7rem; height: .7rem; border-radius: 50%; margin: 0 .25rem 0 .7rem;
       vertical-align: middle;}
 .qr {max-width: 200px;}
@@ -143,7 +153,8 @@ def public_url() -> str:
 def header(show_title: bool) -> None:
     left, right = st.columns([5, 1], vertical_alignment="center")
     if show_title:
-        left.markdown("## 🧬 Bloodline")
+        left.markdown(f'<div class="brand"><span class="brand-logo">{LOGO_SVG}</span>Bloodline</div>',
+                      unsafe_allow_html=True)
     with right:
         choice = st.segmented_control(
             "lang",
@@ -186,7 +197,7 @@ def screen_menu() -> None:
     st.markdown(
         '<div class="hero">'
         f"{ui.hero_gallery(ss.hero_seed)}"
-        '<div class="hero-title">BLOODLINE</div>'
+        f'<div class="hero-title"><span class="hero-logo">{LOGO_SVG}</span>BLOODLINE</div>'
         f'<div class="hero-tag">{t("menu.tagline")}</div>'
         f'<div class="hero-intro">{t("menu.intro")}</div>'
         "</div>",
@@ -322,14 +333,15 @@ def founder_slot(game: Game, slot: int) -> None:
     cid = game.slots[slot]
     level = game.generations
     with st.container(width=88, gap="small", horizontal_alignment="center"):
+        sex = slot_sex(slot)
         if cid is None:
-            st.markdown(f'<div class="slot-pic">{ui.empty_slot(level)}</div>', unsafe_allow_html=True)
-            label, icon = t(f"build.slot.{slot_sex(slot)}"), ":material/add:"
+            st.markdown(f'<div class="slot-pic">{ui.empty_slot(level, sex)}</div>', unsafe_allow_html=True)
+            label = f"{SEX_MD[sex]} {t('build.choose')}"
         else:
             c = game.candidate(cid)
             st.markdown(f'<div class="slot-pic">{ui.portrait(c, game.model)}</div>', unsafe_allow_html=True)
-            label, icon = c.name.split()[0], ":material/swap_horiz:"
-        if st.button(label, key=f"slot-btn-{slot}", icon=icon, width="stretch", help=t("build.slot_help")):
+            label = f"{SEX_MD[sex]} {c.name.split()[0]}"
+        if st.button(label, key=f"slot-btn-{slot}", width="stretch"):
             open_picker(slot)
 
 
@@ -362,7 +374,7 @@ def screen_build() -> None:
 
     st.markdown(f"#### {t('build.candidates')}")
     st.caption(t("build.candidates_help"))
-    tabs = st.tabs([t("build.tab.M"), t("build.tab.F")])
+    tabs = st.tabs([f"{SEX_MD['M']} {t('build.tab.M')}", f"{SEX_MD['F']} {t('build.tab.F')}"])
     for tab, sex in zip(tabs, ("M", "F")):
         with tab:
             people = game.candidates_of(sex)
@@ -380,6 +392,10 @@ def new_game_same_nick() -> None:
     start_game(None)
 
 
+def outcome_text_key(outcome: str, sex: str) -> str:
+    return f"result.{outcome}.text.{sex}" if outcome == "win" else f"result.{outcome}.text"
+
+
 def screen_result() -> None:
     game: Game = st.session_state.game
     result = game.resolve()
@@ -390,7 +406,7 @@ def screen_result() -> None:
     st.markdown(
         f'<div class="banner" style="background:{color}1f;border:2px solid {color}">'
         f"<h2>{emoji} {t(f'result.{result.outcome}.title')}</h2>"
-        f"<p>{t(f'result.{result.outcome}.text')}</p></div>",
+        f"<p>{t(outcome_text_key(result.outcome, result.me.sex))}</p></div>",
         unsafe_allow_html=True,
     )
 
@@ -433,14 +449,8 @@ def screen_result() -> None:
 
     st.toggle(t("result.show_tree"), key="show_tree")
     if st.session_state.show_tree:
-        st.markdown(f'<div class="tree-wrap">{ui.full_tree(game, result, t)}</div>', unsafe_allow_html=True)
-        legend = "".join(
-            f'<span class="dot" style="background:{STATUS_COLORS[s]}"></span>{t(f"legend.{s}")}'
-            for s in ("clear", "carrier", "affected")
-        )
-        names = " · ".join(f"{i + 1}. {d.label(lang)}" for i, d in enumerate(cfg.diseases))
-        st.markdown(f'<div class="legend">{legend}<br>{t("legend.order", names=names)}</div>',
-                    unsafe_allow_html=True)
+        st.markdown(f'<div class="legend">👆 {t("result.tree_hint")}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="tree-wrap">{ui.full_tree(game, result, t, lang)}</div>', unsafe_allow_html=True)
 
     if st.session_state.get("save_error"):
         st.warning(t("result.save_error"), icon="⚠️")

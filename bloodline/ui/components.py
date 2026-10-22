@@ -90,24 +90,34 @@ def lower_tree(game: Game, t: T, width: float = 1100) -> str:
     return pedigree_svg(nodes, g - 1, spread_width=width, max_width=100_000)
 
 
-def empty_slot(level: int) -> str:
-    return render_unknown(GENERATION_NAMES[level], size=None, label="+")
+SEX_SYMBOL = {"M": "♂", "F": "♀"}
+SEX_COLOR = {"M": "#3d7fc4", "F": "#c9508a"}
 
 
-def full_tree(game: Game, result: Result, t: T) -> str:
-    """Pedigree after birth with every person and a dot per disease."""
+def empty_slot(level: int, sex: str) -> str:
+    return render_unknown(GENERATION_NAMES[level], size=None, label=SEX_SYMBOL[sex], color=SEX_COLOR[sex])
+
+
+def full_tree(game: Game, result: Result, t: T, lang: str) -> str:
+    """Pedigree after birth: every person, a dot per disease and a hover
+    card with the status of each disease."""
     g = game.generations
-    diseases = [d.id for d in game.config.diseases]
+    diseases = game.config.diseases
     nodes = {}
     for level, people in result.levels.items():
         for p in people:
             label = p.name.split()[0] if p.name else role_label(t, level, p.index, g)
             sick = level == 0 and bool(result.affected)
+            statuses = [status_of(game.model, p, d.id) for d in diseases]
             nodes[(level, p.index)] = NodeView(
                 portrait(p, game.model, sick=sick),
                 label,
-                dots=[status_of(game.model, p, d) for d in diseases],
+                dots=statuses,
                 highlight=level == 0,
+                tip_title=p.name or role_label(t, level, p.index, g),
+                tip_lines=[
+                    (st_, f"{d.label(lang)}: {test_label(t, st_, p.sex)}") for d, st_ in zip(diseases, statuses)
+                ],
             )
     return pedigree_svg(nodes, g)
 
