@@ -59,6 +59,9 @@ h1, h2, h3, h4 {font-family: Georgia, 'Times New Roman', serif !important;}
        font-size: .78rem; margin: .1rem .1rem; white-space: normal; overflow-wrap: anywhere; line-height: 1.35;}
 .chips {text-align: center; margin: .2rem 0;}
 .tests {margin-top: .35rem;}
+[class*="st-key-card-"] {gap: .45rem;}
+[class*="st-key-card-"] [data-testid="stMarkdownContainer"] {margin-bottom: 0;}
+.card-hint {margin-bottom: .1rem;}
 .test-line {font-size: .8rem; line-height: 1.35; text-align: center; overflow-wrap: anywhere;}
 .test-line .dot {margin: 0 .3rem 0 0; width: .6rem; height: .6rem;}
 /* tree */
@@ -82,8 +85,10 @@ h1, h2, h3, h4 {font-family: Georgia, 'Times New Roman', serif !important;}
 @media (min-width: 641px) {
   [data-testid="stHorizontalBlock"]:has([class*="st-key-card-"]) {align-items: stretch;}
   [data-testid="stColumn"]:has(> div > [class*="st-key-card-"]) > div,
-  [data-testid="stColumn"]:has([class*="st-key-card-"]) > [data-testid="stVerticalBlock"] {height: 100%;}
-  [class*="st-key-card-"] {height: 100%; min-height: 455px; justify-content: space-between;}
+  [data-testid="stColumn"]:has([class*="st-key-card-"]) > [data-testid="stVerticalBlock"],
+  [data-testid="stLayoutWrapper"]:has(> [class*="st-key-card-"]) {height: 100%;}
+  [class*="st-key-card-"] {height: 100%; justify-content: flex-start;}
+  [class*="st-key-card-"] > div:first-child {flex: 1 0 auto;}
 }
 .heart {color: #8c2f39; font-size: 1rem; margin: 0 4px 18px;}
 .tree-wrap {overflow-x: auto; -webkit-overflow-scrolling: touch;}
