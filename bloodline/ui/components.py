@@ -27,8 +27,11 @@ def look_of(person: Person, model: InheritanceModel) -> Look:
     )
 
 
-def portrait(person: Person, model: InheritanceModel, size: int | None = None, sick: bool = False) -> str:
-    return render_avatar(look_of(person, model), person.generation, seed=person.avatar_seed, size=size, sick=sick)
+MOOD_BY_OUTCOME = {"perfect": "happy", "win": "smile", "loss": "sick"}
+
+
+def portrait(person: Person, model: InheritanceModel, size: int | None = None, mood: str = "neutral") -> str:
+    return render_avatar(look_of(person, model), person.generation, seed=person.avatar_seed, size=size, mood=mood)
 
 
 def role_label(t: T, level: int, index: int, generations: int) -> str:
@@ -91,22 +94,30 @@ def status_of(model: InheritanceModel, person: Person, gene_id: str) -> str:
 
 
 # ---------------------------------------------------------------- trees
-def lower_tree(game: Game, t: T, width: float = 1300) -> str:
+def lower_tree(game: Game, t: T) -> str:
     """Grandparents, parents and "me", still unknown while building.
 
-    The founders are drawn above it as interactive slots, so this drawing
-    starts one level below and spreads the grandparents under each couple."""
+    The founders are drawn above it as interactive frames, so this drawing
+    starts one level below with each grandparent under its couple. Two
+    versions are rendered and CSS shows the one whose portraits match the
+    size of the founder frames (side by side on wide screens, stacked on
+    narrow ones)."""
     g = game.generations
-    nodes = {
-        (level, i): NodeView(
-            render_unknown(GENERATION_NAMES[level], size=None),
-            role_label(t, level, i, g),
-            highlight=level == 0,
-        )
-        for level in range(g - 1, -1, -1)
-        for i in range(2**level)
-    }
-    return pedigree_svg(nodes, g - 1, spread_width=width, max_width=100_000, row_gap=22, label_px=16)
+
+    def nodes():  # fresh SVG ids for each version (clip paths must not be shared)
+        return {
+            (level, i): NodeView(
+                render_unknown(GENERATION_NAMES[level], size=None),
+                role_label(t, level, i, g),
+                highlight=level == 0,
+            )
+            for level in range(g - 1, -1, -1)
+            for i in range(2**level)
+        }
+
+    wide = pedigree_svg(nodes(), g - 1, spread_width=1090, max_width=100_000, row_gap=22, label_px=15)
+    narrow = pedigree_svg(nodes(), g - 1, spread_width=600, max_width=100_000, row_gap=14, label_px=15)
+    return f'<div class="lt-wide">{wide}</div><div class="lt-narrow">{narrow}</div>'
 
 
 SEX_SYMBOL = {"M": "♂", "F": "♀"}
@@ -126,10 +137,10 @@ def full_tree(game: Game, result: Result, t: T, lang: str) -> str:
     for level, people in result.levels.items():
         for p in people:
             label = p.name.split()[0] if p.name else role_label(t, level, p.index, g)
-            sick = level == 0 and bool(result.affected)
+            mood = MOOD_BY_OUTCOME[result.outcome] if level == 0 else "neutral"
             statuses = [status_of(game.model, p, d.id) for d in diseases]
             nodes[(level, p.index)] = NodeView(
-                portrait(p, game.model, sick=sick),
+                portrait(p, game.model, mood=mood),
                 label,
                 dots=statuses,
                 highlight=level == 0,

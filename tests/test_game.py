@@ -1,5 +1,7 @@
 import xml.etree.ElementTree as ET
 
+import re
+
 import pytest
 
 from bloodline.avatar import EYES, HAIR, SKIN, Look, render_avatar, render_unknown
@@ -93,6 +95,20 @@ def test_avatars_are_valid_svg():
                 for hair in HAIR:
                     for skin in SKIN:
                         ET.fromstring(render_avatar(Look(sex, eyes, hair, True, skin), gen, seed=1, sick=True))
+
+
+def test_avatars_vary_and_are_deterministic():
+    look = Look("F", "green", "red", False, "light")
+    for gen in ("great_grandparent", "grandparent", "parent", "self"):
+        drawings = {render_avatar(look, gen, seed=s) for s in range(40)}
+        assert len(drawings) == 40  # svg ids differ, so compare without them below
+        strip = lambda svg: re.sub(r"\b[au]\d+\b", "", svg)  # noqa: E731  (drop unique clip ids)
+        assert len({strip(d) for d in drawings}) >= 35
+        assert strip(render_avatar(look, gen, seed=3)) == strip(render_avatar(look, gen, seed=3))
+    for mood in ("neutral", "smile", "happy", "sad", "sick"):
+        ET.fromstring(render_avatar(look, "self", seed=5, mood=mood))
+    with pytest.raises(ValueError):
+        render_avatar(look, "self", mood="angry")
 
 
 def test_ranking_counts_first_play_per_seed_only():

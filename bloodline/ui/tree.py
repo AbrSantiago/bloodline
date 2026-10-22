@@ -129,9 +129,9 @@ def pedigree_svg(
             portraits.extend(group)
 
     return (
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width:.0f} {height:.0f}" '
+        f'<svg id="{uid}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width:.0f} {height:.0f}" '
         f'style="width:100%;max-width:{max_width}px;height:auto;display:block;margin:0 auto" role="img">'
-        f"<style>.lbl{{font:600 {label_px}px system-ui,sans-serif;fill:var(--bl-text,#2b2420)}}"
+        f"<style>#{uid} .lbl{{font:600 {label_px}px system-ui,sans-serif;fill:var(--bl-text,#2b2420)}}"
         ".ln path{stroke:var(--bl-line,#8a7f73);stroke-width:2.5;fill:none;stroke-linecap:round}"
         ".hl{stroke:var(--bl-accent,#8c2f39)}.ring{stroke:var(--bl-ring,#fff)}"
         ".tip rect{fill:var(--bl-surface,#fffaf0);stroke:var(--bl-gold,#b8892f)}"

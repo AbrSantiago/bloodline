@@ -18,6 +18,7 @@ from bloodline.i18n import DEFAULT_LANGUAGE, LANGUAGES, translate
 from bloodline.ranking import build_ranking, by_avg_risk, by_win_rate, by_wins
 from bloodline.storage import get_store
 from bloodline.ui import components as ui
+from bloodline.ui.icons import ICONS_CSS, icon, rank_badge
 from bloodline.ui.tree import STATUS_COLORS
 
 ASSETS = Path(__file__).resolve().parent / "assets"
@@ -32,6 +33,7 @@ st.set_page_config(page_title="Bloodline", page_icon=str(ASSETS / "icon.png"), l
 
 CSS = """
 <style>
+ICONS_CSS_HERE
 /* palette: every color reacts to Streamlit's light/dark theme via light-dark() */
 .stApp {
   --bl-text: light-dark(#2b2420, #f1e6d6);
@@ -115,6 +117,64 @@ h1, h2, h3, h4 {font-family: Georgia, 'Times New Roman', serif !important;}
 .bl-share.done {border-color: #3f9d5a; color: #3f9d5a;}
 .qr.center {margin: 0 auto .6rem;}
 .st-key-rules-box {padding: .4rem 1rem !important;}
+/* header: title + switches on one row */
+.st-key-appbar {flex-wrap: nowrap !important; gap: .5rem;}
+.st-key-appbar [data-testid="stMarkdownContainer"] {margin-bottom: 0;}
+.brand {font-size: clamp(1.25rem, 4.6vw, 2rem) !important; white-space: nowrap;}
+.brand-logo svg {width: 1.15em !important; height: 1.15em !important;}
+.st-key-topbar {gap: .4rem; flex-wrap: nowrap !important;}
+.bl-icon-btn {height: var(--bl-ctl-h, 2.25rem) !important; width: var(--bl-ctl-h, 2.25rem) !important;}
+[data-testid="stButtonGroup"] button {min-height: 2.25rem; height: 2.25rem;}
+/* skeletons while data loads */
+@keyframes bl-shimmer {0% {background-position: -400px 0;} 100% {background-position: 400px 0;}}
+.skel {border-radius: 8px; background: linear-gradient(90deg,
+  light-dark(rgba(43, 36, 32, .07), rgba(241, 230, 214, .06)) 0%,
+  light-dark(rgba(43, 36, 32, .14), rgba(241, 230, 214, .13)) 50%,
+  light-dark(rgba(43, 36, 32, .07), rgba(241, 230, 214, .06)) 100%);
+  background-size: 800px 100%; animation: bl-shimmer 1.2s linear infinite;}
+.skel-tabs {display: flex; justify-content: center; gap: 1rem; margin: .3rem 0 1rem;}
+.skel-tab {width: 92px; height: 1.3rem;}
+.skel-row {height: 2.4rem; margin: .4rem 0;}
+.skel-qr {width: 200px; height: 200px; max-width: 200px; aspect-ratio: 1;}
+/* leaderboard */
+[data-testid="stTabs"] [role="tablist"] {justify-content: center;}
+.st-key-menu-body [data-testid="stTabPanel"] {min-height: 330px;}
+.st-key-rules-box [data-testid="stMarkdownContainer"] {margin-bottom: 0;}
+.st-key-menu-body [data-testid="stCaptionContainer"] {text-align: center;}
+.rk {max-height: 420px; overflow: auto; border-radius: 10px;
+     border: 1px solid light-dark(rgba(43, 36, 32, .15), rgba(241, 230, 214, .15));}
+.rk table {width: 100%; border-collapse: collapse; text-align: center; font-size: .92rem;}
+.rk th {position: sticky; top: 0; z-index: 1; padding: .55rem .4rem; font-weight: 600; font-size: .8rem;
+        letter-spacing: .06em; text-transform: uppercase; background: light-dark(#ece4d6, #2b2023);}
+.rk td {padding: .45rem .4rem; border-top: 1px solid light-dark(rgba(43, 36, 32, .08), rgba(241, 230, 214, .08));}
+.rk tbody tr:nth-child(even) {background: light-dark(rgba(43, 36, 32, .03), rgba(241, 230, 214, .03));}
+.rk .c-main {font-weight: 700; color: var(--bl-accent);}
+.rk .c-nick {font-weight: 600;}
+.rk svg.rank {display: block; margin: 0 auto;}
+.rank-n {display: inline-block; min-width: 1.6rem; font-weight: 600; opacity: .75;}
+.rk-empty {text-align: center; opacity: .7; padding: 1rem;}
+/* rules */
+.rules p, .rules li {font-size: .93rem; line-height: 1.45; margin: 0 0 .35rem;}
+.rules h4 {font-size: 1rem !important; margin: .7rem 0 .25rem !important; padding: 0 !important;}
+.rules ol {margin: 0 0 .2rem 1.1rem; padding: 0;}
+.rules ul.outcomes {list-style: none; margin: 0; padding: 0;}
+.rules ul.outcomes li {display: flex; align-items: center; gap: .5rem;}
+.rules .ic {font-size: 1.1rem;}
+.rules .muted {opacity: .75; margin-top: .6rem;}
+h4.with-ic {display: flex; align-items: center; gap: .45rem;}
+.banner h2 .ic {vertical-align: -.12em;}
+/* picker: at least 3 cards per row on phones */
+@media (max-width: 640px) {
+  [class*="st-key-pick-grid"] [data-testid="stLayoutWrapper"]:has(> [class*="st-key-card-"]) {
+    flex: 0 0 calc(33.333% - .34rem) !important; width: calc(33.333% - .34rem) !important;}
+  [class*="st-key-card-d-"] {padding: .3rem .25rem .35rem !important; gap: .25rem;}
+  [class*="st-key-card-d-"] .card-name {font-size: .74rem;}
+  [class*="st-key-card-d-"] .card-hint {font-size: .66rem; line-height: 1.25;}
+  [class*="st-key-card-d-"] .test-line {font-size: .64rem;}
+  [class*="st-key-card-d-"] .ribbon {font-size: .55rem; letter-spacing: 0;}
+  [class*="st-key-card-d-"] button {min-height: 1.8rem; padding: .1rem .2rem;}
+  [class*="st-key-card-d-"] button p {font-size: .7rem;}
+}
 /* cards (also used inside the picker dialog, which lives outside .stApp:
    colors there inherit Streamlit's theme instead of using our variables) */
 .portrait {position: relative; max-width: 150px; margin: 0 auto;}
@@ -141,9 +201,7 @@ h1, h2, h3, h4 {font-family: Georgia, 'Times New Roman', serif !important;}
 [class*="st-key-card-"] button p {font-size: .82rem;}
 .st-key-pick-grid {align-items: stretch !important; justify-content: center;}
 @media (max-width: 640px) {
-  [class*="st-key-card-d-"] {width: calc(50% - .3rem) !important;}
-  [class*="st-key-pick-grid"] [data-testid="stLayoutWrapper"]:has(> [class*="st-key-card-"]) {
-    flex: 0 0 calc(50% - .25rem) !important; width: calc(50% - .25rem) !important;}
+  [class*="st-key-card-d-"] {width: 100% !important;}
   .st-key-pick-grid {gap: .5rem !important;}
   [class*="st-key-pick-grid"] [data-testid="stLayoutWrapper"]:has(> [class*="st-key-card-"]) > div {width: 100% !important;}
 }
@@ -170,8 +228,9 @@ h1, h2, h3, h4 {font-family: Georgia, 'Times New Roman', serif !important;}
 .st-key-couples > div, .st-key-couples > [data-testid="stLayoutWrapper"] {flex: 1 1 0 !important; min-width: 0 !important;}
 [class*="st-key-cbox-"] {container-type: inline-size; padding: .45rem .35rem !important; min-width: 0;}
 .couple-title {font-weight: 700; text-align: center; font-size: .82rem; margin-bottom: .3rem; white-space: nowrap;}
-[class*="st-key-couple-"] {flex-wrap: nowrap !important; width: 100%;}
-[class*="st-key-couple-"] > [data-testid="stLayoutWrapper"] {flex: 0 1 84px !important; max-width: 84px; min-width: 0;}
+[class*="st-key-couple-"] {flex-wrap: nowrap !important; width: 100%; overflow: visible !important;}
+/* founder frames scale with their couple box so they match the portraits of the tree below */
+[class*="st-key-couple-"] > [data-testid="stLayoutWrapper"] {flex: 0 0 38cqw !important; max-width: none; min-width: 0;}
 [class*="st-key-slot-"]:not([class*="st-key-slot-btn"]) {position: relative; cursor: pointer; width: 100% !important;
     min-width: 0;}
 .slot-pic {position: relative; width: 100%; transition: transform .12s ease, filter .12s ease;}
@@ -185,13 +244,20 @@ h1, h2, h3, h4 {font-family: Georgia, 'Times New Roman', serif !important;}
 [class*="st-key-slot-btn"] .stButton, [class*="st-key-slot-btn"] button {width: 100% !important; height: 100% !important;}
 [class*="st-key-slot-btn"] button {opacity: 0; cursor: pointer;}
 .heart {color: var(--bl-accent); font-size: .95rem; line-height: 1; margin: 0 5px; text-align: center;}
-@container (max-width: 150px) {
-  [class*="st-key-couple-"] {flex-direction: column !important;}
-  [class*="st-key-couple-"] > [data-testid="stLayoutWrapper"] {flex: 0 0 auto !important; width: 100%;}
+@container (max-width: 130px) {
+  [class*="st-key-couple-"] {flex-direction: column !important; justify-content: flex-start !important;
+    overflow: visible !important; height: auto !important;}
+  [class*="st-key-couple-"] > [data-testid="stLayoutWrapper"] {flex: 0 0 auto !important; width: 80cqw !important;}
   .heart {margin: 4px 0;}
 }
+.lower {container-type: inline-size;}
+.lt-narrow {display: none;}
+@container (max-width: 581px) {
+  .lt-wide {display: none;}
+  .lt-narrow {display: block;}
+}
 .lower {margin-top: -2px;}
-.lower > svg {width: 100%; height: auto; display: block;}
+.lower svg.ptree, .lt-wide > svg, .lt-narrow > svg {width: 100%; height: auto; display: block;}
 [class*="st-key-cbox-"] [data-testid="stMarkdownContainer"], .st-key-gamebar [data-testid="stMarkdownContainer"],
 .st-key-birth-row [data-testid="stMarkdownContainer"] {margin-bottom: 0;}
 .st-key-birth-row {gap: .2rem;}
@@ -225,9 +291,9 @@ h1, h2, h3, h4 {font-family: Georgia, 'Times New Roman', serif !important;}
 """
 
 OUTCOME_STYLE = {
-    "perfect": ("🏆", "#3f9d5a"),
-    "win": ("✅", "#5a8fbf"),
-    "loss": ("💀", "#d83a3a"),
+    "perfect": ("trophy", "#3f9d5a"),
+    "win": ("check", "#5a8fbf"),
+    "loss": ("skull", "#d83a3a"),
 }
 
 
@@ -315,25 +381,26 @@ def theme_toggle() -> None:
 
 
 def header(show_title: bool) -> None:
-    left, right = st.columns([3, 2], vertical_alignment="center")
-    if show_title:
-        left.markdown(f'<div class="brand"><span class="brand-logo">{LOGO_SVG}</span>Bloodline</div>',
-                      unsafe_allow_html=True)
-    with right, st.container(horizontal=True, horizontal_alignment="right", vertical_alignment="center",
-                             key="topbar"):
-        theme_toggle()
-        choice = st.segmented_control(
-            "lang",
-            LANGUAGES,
-            default=st.session_state.lang,
-            format_func=lambda code: f"![]({FLAGS[code]}) {code.upper()}",
-            label_visibility="collapsed",
-            key="lang_select",
-            required=True,
-        )
-        if choice and choice != st.session_state.lang:
-            st.session_state.lang = choice
-            st.rerun()
+    with st.container(horizontal=True, vertical_alignment="center", horizontal_alignment="distribute",
+                      key="appbar"):
+        if show_title:
+            st.markdown(f'<div class="brand"><span class="brand-logo">{LOGO_SVG}</span>Bloodline</div>',
+                        unsafe_allow_html=True, width="content")
+        with st.container(horizontal=True, horizontal_alignment="right", vertical_alignment="center",
+                          key="topbar", width="content"):
+            theme_toggle()
+            choice = st.segmented_control(
+                "lang",
+                LANGUAGES,
+                default=st.session_state.lang,
+                format_func=lambda code: f"![]({FLAGS[code]}) {code.upper()}",
+                label_visibility="collapsed",
+                key="lang_select",
+                required=True,
+            )
+            if choice and choice != st.session_state.lang:
+                st.session_state.lang = choice
+                st.rerun()
 
 
 # ---------------------------------------------------------------- menu
@@ -468,11 +535,28 @@ def view_code() -> None:
         back_button()
 
 
+def rules_html() -> str:
+    steps = "".join(f"<li>{t(f'rules.step{i}')}</li>" for i in range(1, 5))
+    outcomes = "".join(
+        f'<li>{icon(OUTCOME_STYLE[o][0], OUTCOME_STYLE[o][1])}<span>{t(f"rules.{o}")}</span></li>'
+        for o in ("perfect", "win", "loss")
+    )
+    return (
+        '<div class="rules">'
+        f'<p>{t("rules.goal")}</p>'
+        f'<h4>{t("rules.inherit_title")}</h4><p>{t("rules.inherit")}</p>'
+        f'<h4>{t("rules.play_title")}</h4><ol>{steps}</ol>'
+        f'<h4>{t("rules.outcomes_title")}</h4><ul class="outcomes">{outcomes}</ul>'
+        f'<p class="muted">{t("rules.risk")}</p>'
+        "</div>"
+    )
+
+
 def view_rules() -> None:
     hero(full=False, subtitle=t("rules.title"))
     with menu_column(wide=True):
         with st.container(border=True, key="rules-box"):
-            st.markdown(t("rules.body"))
+            st.markdown(rules_html(), unsafe_allow_html=True)
     with menu_column():
         back_button()
 
@@ -480,7 +564,7 @@ def view_rules() -> None:
 def view_ranking() -> None:
     hero(full=False, subtitle=t("ranking.title"))
     with menu_column(wide=True):
-        ranking_tables(height=420)
+        ranking_tables()
     with menu_column():
         st.button(t("ranking.refresh"), key="refresh", width="stretch", on_click=load_records.clear)
         back_button()
@@ -490,7 +574,9 @@ def view_share() -> None:
     hero(full=False, subtitle=t("menu.share"))
     with menu_column():
         st.caption(t("menu.share_help"))
-        st.markdown(f'<div class="qr center">{ui.qr_svg(public_url())}</div>', unsafe_allow_html=True)
+        slot = st.empty()  # skeleton first, the QR replaces it in place
+        slot.markdown('<div class="qr center skel skel-qr"></div>', unsafe_allow_html=True)
+        slot.markdown(f'<div class="qr center">{ui.qr_svg(public_url())}</div>', unsafe_allow_html=True)
         share_button(public_url(), "share-app")
         back_button()
 
@@ -680,11 +766,11 @@ def screen_result() -> None:
     result = game.resolve()
     cfg, lang = game.config, st.session_state.lang
     risk = result.risk
-    emoji, color = OUTCOME_STYLE[result.outcome]
+    icon_name, color = OUTCOME_STYLE[result.outcome]
 
     st.markdown(
         f'<div class="banner" style="background:{color}1f;border:2px solid {color}">'
-        f"<h2>{emoji} {t(f'result.{result.outcome}.title')}</h2>"
+        f"<h2>{icon(icon_name, color)} {t(f'result.{result.outcome}.title')}</h2>"
         f"<p>{t(outcome_text_key(result.outcome, result.me.sex))}</p></div>",
         unsafe_allow_html=True,
     )
@@ -693,7 +779,7 @@ def screen_result() -> None:
     me = result.me
     with left:
         st.markdown(
-            f'<div class="portrait-big">{ui.portrait(me, game.model, sick=bool(result.affected))}</div>'
+            f'<div class="portrait-big">{ui.portrait(me, game.model, mood=ui.MOOD_BY_OUTCOME[result.outcome])}</div>'
             f'<div class="card-name">{t("role.me")}</div>',
             unsafe_allow_html=True,
         )
@@ -707,9 +793,9 @@ def screen_result() -> None:
         st.markdown(f"### {t('result.risk_title', risk=fmt_pct(risk.p_loss))}")
         st.caption(t("result.risk_help"))
         m = st.columns(3)
-        m[0].metric(t("result.p_perfect"), fmt_pct(risk.p_perfect))
-        m[1].metric(t("result.p_win"), fmt_pct(risk.p_win_carrier))
-        m[2].metric(t("result.p_loss"), fmt_pct(risk.p_loss))
+        m[0].metric(f":material/emoji_events: {t('result.p_perfect')}", fmt_pct(risk.p_perfect))
+        m[1].metric(f":material/check_circle: {t('result.p_win')}", fmt_pct(risk.p_win_carrier))
+        m[2].metric(f":material/skull: {t('result.p_loss')}", fmt_pct(risk.p_loss))
         for d in cfg.diseases:
             r = risk.disease(d.id)
             carriers = [
@@ -722,9 +808,9 @@ def screen_result() -> None:
                 t("result.carriers", names=", ".join(carriers)) if carriers else t("result.no_carriers")
             )
         if result.outcome == "loss" and risk.p_loss < 0.25:
-            st.info(t("result.bad_luck"), icon="🎲")
+            st.info(t("result.bad_luck"), icon=":material/casino:")
         elif result.outcome != "loss" and risk.p_loss > 0.55:
-            st.info(t("result.good_luck"), icon="🍀")
+            st.info(t("result.good_luck"), icon=":material/auto_awesome:")
 
     with st.container(horizontal_alignment="center"):
         shown = st.session_state.show_tree
@@ -736,13 +822,13 @@ def screen_result() -> None:
             on_click=lambda: st.session_state.update(show_tree=not st.session_state.show_tree),
         )
     if st.session_state.show_tree:
-        st.markdown(f'<div class="legend">👆 {t("result.tree_hint")}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="legend">{t("result.tree_hint")}</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="tree-wrap">{ui.full_tree(game, result, t, lang)}</div>', unsafe_allow_html=True)
 
     if st.session_state.get("save_error"):
-        st.warning(t("result.save_error"), icon="⚠️")
+        st.warning(t("result.save_error"), icon=":material/warning:")
 
-    st.markdown(f"#### {t('result.challenge_title')}")
+    st.markdown(f'<h4 class="with-ic">{icon("swords")} {t("result.challenge_title")}</h4>', unsafe_allow_html=True)
     link = f"{public_url()}/?seed={game.seed}"
     c1, c2 = st.columns([3, 1])
     with c1:
@@ -759,55 +845,78 @@ def screen_result() -> None:
 
 
 # ---------------------------------------------------------------- ranking
-def ranking_tables(height: int | str = "auto") -> None:
+RANK_VIEWS = (
+    # tab key, sorted view, main metric column, help key
+    ("wins", "wins"),
+    ("win_rate", "win_rate"),
+    ("risk", "avg_risk"),
+)
+
+
+def skeleton_table(rows: int = 4) -> str:
+    bars = "".join('<div class="skel skel-row"></div>' for _ in range(rows))
+    return f'<div class="skel-tabs"><div class="skel skel-tab"></div>' \
+           f'<div class="skel skel-tab"></div><div class="skel skel-tab"></div></div>{bars}'
+
+
+def ranking_html(view, metric: str) -> str:
+    """One leaderboard table: rank, player, the tab's metric and games played."""
+    head_metric = {"wins": t("ranking.col.wins"), "win_rate": t("ranking.col.win_rate"),
+                   "avg_risk": t("ranking.col.avg_risk")}[metric]
+    rows = []
+    for i, r in enumerate(view.itertuples(index=False), start=1):
+        if metric == "wins":
+            value = f"{int(r.wins)}"
+            extra = f'<td>{int(r.perfect)}</td>'
+        else:
+            value = f"{100 * getattr(r, metric):.1f}%"
+            extra = ""
+        rows.append(
+            f'<tr><td class="c-rank">{rank_badge(i)}</td><td class="c-nick">{escape(str(r.nick))}</td>'
+            f'<td class="c-main">{value}</td>{extra}<td>{int(r.games)}</td></tr>'
+        )
+    perfect_head = f'<th>{t("ranking.col.perfect")}</th>' if metric == "wins" else ""
+    return (
+        '<div class="rk"><table><thead><tr>'
+        f'<th>#</th><th>{t("ranking.col.nick")}</th><th class="c-main">{head_metric}</th>{perfect_head}'
+        f'<th>{t("ranking.col.games")}</th></tr></thead><tbody>{"".join(rows)}</tbody></table></div>'
+    )
+
+
+def ranking_tables() -> None:
+    slot = st.empty()
+    slot.markdown(skeleton_table(), unsafe_allow_html=True)  # shown while the results load
     try:
         table = build_ranking(load_records())
     except Exception:
-        st.error(t("ranking.error"))
+        slot.error(t("ranking.error"))
         return
     min_games = get_config().rules.ranking_min_games
     if table.empty:
-        st.info(t("ranking.empty"), icon="🪦")
+        slot.info(t("ranking.empty"), icon=":material/leaderboard:")
         return
-    cols = {
-        "nick": t("ranking.col.nick"),
-        "games": t("ranking.col.games"),
-        "wins": t("ranking.col.wins"),
-        "perfect": t("ranking.col.perfect"),
-        "win_rate": t("ranking.col.win_rate"),
-        "avg_risk": t("ranking.col.avg_risk"),
+    views = {
+        "wins": by_wins(table),
+        "win_rate": by_win_rate(table, min_games),
+        "risk": by_avg_risk(table, min_games),
     }
-    tabs = st.tabs([t("ranking.tab.wins"), t("ranking.tab.win_rate"), t("ranking.tab.risk")])
-    views = (
-        (by_wins(table), "ranking.help.wins"),
-        (by_win_rate(table, min_games), "ranking.help.win_rate"),
-        (by_avg_risk(table, min_games), "ranking.help.risk"),
-    )
-    for tab, (view, help_key) in zip(tabs, views):
-        with tab:
-            st.caption(t(help_key, min=min_games))
-            shown = view.copy()
-            medals = ["🥇", "🥈", "🥉"]
-            shown.insert(0, "#", [medals[i] if i < 3 else str(i + 1) for i in range(len(shown))])
-            shown["win_rate"] = (100 * shown["win_rate"]).round(1)
-            shown["avg_risk"] = (100 * shown["avg_risk"]).round(1)
-            rows_h = 38 + 35 * len(shown)
-            st.dataframe(
-                shown.rename(columns=cols),
-                hide_index=True,
-                width="stretch",
-                height=min(height, rows_h) if isinstance(height, int) else height,
-                column_config={
-                    cols["win_rate"]: st.column_config.NumberColumn(format="%.1f%%"),
-                    cols["avg_risk"]: st.column_config.NumberColumn(format="%.1f%%"),
-                },
-            )
+    with slot.container():
+        tabs = st.tabs([t("ranking.tab.wins"), t("ranking.tab.win_rate"), t("ranking.tab.risk")])
+        for tab, (key, metric) in zip(tabs, RANK_VIEWS):
+            with tab:
+                st.caption(t(f"ranking.help.{key}", min=min_games))
+                view = views[key]
+                if view.empty:
+                    st.markdown(f'<div class="rk-empty">{t("ranking.not_enough", min=min_games)}</div>',
+                                unsafe_allow_html=True)
+                else:
+                    st.markdown(ranking_html(view, metric), unsafe_allow_html=True)
 
 
 # ---------------------------------------------------------------- main
 def main() -> None:
     init_state()
-    st.markdown(CSS, unsafe_allow_html=True)
+    st.markdown(CSS.replace("ICONS_CSS_HERE", ICONS_CSS), unsafe_allow_html=True)
     screen = st.session_state.screen
     if screen in ("build", "result") and st.session_state.game is None:
         screen = "menu"
