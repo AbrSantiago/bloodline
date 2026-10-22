@@ -218,3 +218,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Bloodline
+.data/
+/bloodline_data.xlsx
